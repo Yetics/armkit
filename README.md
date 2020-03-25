@@ -33,7 +33,7 @@ supported programming languages to define reusable cloud components called [cons
 are composed together into [stacks], forming a "CDK app".
 
 They then use the [Azure CDK CLI] to interact with their CDK app. The CLI allows developers to
-synthesize artifacts such as Azure CloudFormation Templates, deploy stacks to development Azure accounts and "diff"
+synthesize artifacts such as Azure ARM Templates, deploy stacks to development Azure accounts and "diff"
 against a deployed stack to understand the impact of a code change.
 
 The [Azure Construct Library] includes a module for each
@@ -87,7 +87,7 @@ $ armkit deploy
 Use the `armkit` command-line toolkit to interact with your project:
 
  * `armkit deploy`: deploys your app into an Azure account
- * `armkit synth`: synthesizes an Azure CloudFormation template for your app
+ * `armkit synth`: synthesizes an Azure ARM template for your app
  * `armkit diff`: compares your app with the deployed stack
 
 For a detailed walkthrough, see the [tutorial] in the Azure CDK [Developer Guide].
