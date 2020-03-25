@@ -86,8 +86,8 @@ $ armkit deploy
 
 Use the `armkit` command-line toolkit to interact with your project:
 
- * `armkit deploy`: deploys your app into an AWS account
- * `armkit synth`: synthesizes an AWS CloudFormation template for your app
+ * `armkit deploy`: deploys your app into an Azure account
+ * `armkit synth`: synthesizes an Azure CloudFormation template for your app
  * `armkit diff`: compares your app with the deployed stack
 
 For a detailed walkthrough, see the [tutorial] in the Azure CDK [Developer Guide].
@@ -118,8 +118,8 @@ The [AWS CDK Roadmap project board] lets developers know about our upcoming feat
 
 ## License
 
-The AWS CDK is distributed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+The Azure CDK is distributed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
 See [LICENSE](./LICENSE) and [NOTICE](./NOTICE) for more information.
 
-[Tutorial]: https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html#hello_world_tutorial
+[Tutorial]: https://docs.azure.com/cdk/latest/guide/getting_started.html#hello_world_tutorial
