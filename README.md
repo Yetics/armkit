@@ -1,2 +1,3 @@
 # azure-cdk
-the Azure cloud developing kit
+
+The Azure cloud development kit
