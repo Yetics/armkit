@@ -1,7 +1,8 @@
+
 # Azure Cloud Development Kit (Azure CDK)
 
 ![Build Status](TBD)
-[![Gitter](https://badges.gitter.im/Armkit/community.svg)](https://gitter.im/Armkit/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Join the chat at https://gitter.im/Armkit/azure-cdk](https://badges.gitter.im/Armkit/azure-cdk.svg)](https://gitter.im/Armkit/azure-cdk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NPM version](https://badge.fury.io/js/Azure-cdk.svg)](https://badge.fury.io/js/Azure-cdk)
 
 The **Azure Cloud Development Kit (Azure CDK)** is an open-source software development
@@ -123,3 +124,4 @@ The Azure CDK is distributed under the [Apache License, Version 2.0](https://www
 See [LICENSE](./LICENSE) and [NOTICE](./NOTICE) for more information.
 
 [Tutorial]: https://docs.azure.com/cdk/latest/guide/getting_started.html#hello_world_tutorial
+
