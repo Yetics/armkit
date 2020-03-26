@@ -1,0 +1,45 @@
+{
+  "name": "armkit",
+  "private": true,
+  "version": "0.0.1",
+  "description": "ArmKit - The Cloud Development Kit for Azure",
+  "main": "index.js",
+  "scripts": {
+    "bump": "tools/bump.sh",
+    "build": "lerna run build",
+    "test": "lerna run test",
+    "package": "lerna run package",
+    "release": "tools/release.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Armkit/armkit.git"
+  },
+  "keywords": [
+    "armkit",
+    "cdk",
+    "cloud",
+    "azure",
+    "azure resource manager"
+  ],
+  "author": {
+    "name": "Armkit",
+    "url": "https://armkit.dev"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Armkit/armkit/issues"
+  },
+  "homepage": "https://github.com/Armkit/armkit#readme",
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "packages/@armkit/*"
+    ]
+  },
+  "devDependencies": {    
+    "jsii-release": "^0.1.5",
+    "lerna": "^3.20.2",
+    "standard-version": "^7.1.0"
+  }
+}
