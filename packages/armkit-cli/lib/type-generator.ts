@@ -1,7 +1,6 @@
 import { JSONSchema4 } from "json-schema";
 import { CodeMaker, toPascalCase } from "codemaker";
 
-const PRIMITIVE_TYPES = [ 'string', 'number', 'integer', 'boolean' ];
 const DEFINITIONS_PREFIX = '#/definitions/';
 
 export interface TypeGeneratorOptions {
@@ -10,8 +9,6 @@ export interface TypeGeneratorOptions {
 
 export interface GeneratedConstruct {
   readonly fqn: string;
-  readonly group: string;
-  readonly version: string;
   readonly kind: string;
   readonly schema: JSONSchema4;
 }
@@ -34,16 +31,15 @@ export class TypeGenerator {
 
       this.emitType(optionsStructName, options, def.fqn);
 
+
+
+      
+
       emitConstruct();
 
       function createOptionsStructSchema() {
         const copy: JSONSchema4 = { ...def.schema };
-        const props = copy.properties = copy.properties || {};
-        delete props.apiVersion;
-        delete props.kind;
-        delete props.status;
-        delete copy['x-kubernetes-group-version-kind'];
-    
+
         copy.required = copy.required || [];
         copy.required = copy.required.filter(x => x !== 'apiVersion' && x !== 'kind' && x !== 'status');
     
@@ -81,11 +77,9 @@ export class TypeGenerator {
       }
     
       function emitInitializerSuper() {
-        const groupPrefix = def.group ? `${def.group}/` : '';
         code.open(`super(scope, name, {`);
         code.line(`...options,`);
-        code.line(`kind: '${def.kind}',`);
-        code.line(`apiVersion: '${groupPrefix}${def.version}',`);
+        code.line(`kind: '${def.kind}',`);        
         code.close(`});`);    
       }
     });
@@ -100,11 +94,6 @@ export class TypeGenerator {
 
     if (this.isExcluded(structFqn)) {
       throw new Error(`Type ${structFqn} cannot be added since it matches one of the exclusion patterns`);
-    }
-
-    // skip api objects (they are emitted as constructs and not as data types)
-    if ('x-kubernetes-group-version-kind' in def && def.properties?.metadata) {
-      return typeName;
     }
 
     if (def.$ref) {
@@ -140,7 +129,7 @@ export class TypeGenerator {
 
       return 'string';
     }
-    
+    console.log({def, type: def.type})
     if (def.type !== 'object') {
       throw new Error(`unexpected schema type ${def.type}. Expecting "object"`);
     }
@@ -184,12 +173,14 @@ export class TypeGenerator {
 
       code.openBlock(`export class ${typeName}`);
 
-      for (const option of def.oneOf || def.anyOf || []) {
-        if (typeof(option.type) !== 'string' || !PRIMITIVE_TYPES.includes(option.type)) {
-          throw new Error(`unexpected union type ${JSON.stringify(option.type)}`);
-        }
+      for (const option of def.oneOf || def.anyOf || []) {        
+        let type = ''
+        if (option.$ref) {
+          type = this.typeForRef(option);
+        } else {
+          type = option.type === 'integer' ? 'number' : option.type as string;
 
-        const type = option.type === 'integer' ? 'number' : option.type;
+        }
         const methodName = 'from' + type[0].toUpperCase() + type.substr(1);
         code.openBlock(`public static ${methodName}(value: ${type}): ${typeName}`);
         code.line(`return new ${typeName}(value);`);
@@ -279,6 +270,7 @@ export class TypeGenerator {
 
   private typeForRef(def: JSONSchema4): string {
     const prefix = '#/definitions/';
+    console.log({ref: def.$ref})
     if (!def.$ref || !def.$ref.startsWith(prefix)) {
       throw new Error(`invalid $ref`);
     }
@@ -335,8 +327,6 @@ export class TypeGenerator {
     return false;
   }
 }
-
-
 
 function normalizeTypeName(typeName: string) {
   if (!typeName.startsWith('I')) { // avoid the regex

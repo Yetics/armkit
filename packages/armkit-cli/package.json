@@ -13,7 +13,7 @@
     "package": "./package.sh"
   },
   "keywords": [
-    "armkit",    
+    "armkit",
     "cdk",
     "cloud",
     "azure"
@@ -49,6 +49,7 @@
     ]
   },
   "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "^8.0.0",
     "@aws-cdk/core": "^1.27.0",
     "@types/json-schema": "^7.0.4",
     "@types/node": "^13.7.7",
@@ -68,6 +69,6 @@
     "@types/jest": "^25.1.4",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
-    "jest": "^25.1.0"   
+    "jest": "^25.1.0"
   }
 }
