@@ -111,10 +111,10 @@ environment and submit code.
 
 ## Roadmap
 
-The [AWS CDK Roadmap project board] lets developers know about our upcoming features and priorities to help them plan how to best leverage the CDK and identify opportunities to contribute to the project. See [ROADMAP] for more information and FAQs.
+The [Azure CDK Roadmap project board] lets developers know about our upcoming features and priorities to help them plan how to best leverage the CDK and identify opportunities to contribute to the project. See [ROADMAP] for more information and FAQs.
 
-[Azure CDK Roadmap project board]: https://github.com/orgs/armkit/projects/7
-[Roadmap]: (https://github.com/Armkit/azure-cdk/ROADMAP.md)
+[Azure CDK Roadmap project board]: https://github.com/Armkit/azure-cdk/projects/1
+[Roadmap]: https://github.com/Armkit/azure-cdk/ROADMAP.md
 
 ## License
 
