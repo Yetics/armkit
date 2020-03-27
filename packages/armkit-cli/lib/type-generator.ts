@@ -1,5 +1,6 @@
 import { JSONSchema4 } from "json-schema";
 import { CodeMaker, toPascalCase } from "codemaker";
+import $RefParser = require("@apidevtools/json-schema-ref-parser");
 
 const DEFINITIONS_PREFIX = '#/definitions/';
 
@@ -18,7 +19,7 @@ export class TypeGenerator {
   private readonly emittedTypes = new Set<string>();
   private readonly exclude: string[];
 
-  constructor(private readonly schema: JSONSchema4 = { }, options: TypeGeneratorOptions = { }) {
+  constructor(private readonly schema: $RefParser.$Refs, options: TypeGeneratorOptions = { }) {
     this.exclude = options.exclude || [];
   }
 
@@ -88,6 +89,8 @@ export class TypeGenerator {
   public emitType(typeName: string, def: JSONSchema4, structFqn: string): string {
     typeName = normalizeTypeName(typeName);
 
+    console.log({typeName})
+
     if (structFqn.startsWith(DEFINITIONS_PREFIX)) {
       structFqn = structFqn.substring(DEFINITIONS_PREFIX.length);
     }
@@ -129,7 +132,7 @@ export class TypeGenerator {
 
       return 'string';
     }
-    console.log({def, type: def.type})
+
     if (def.type !== 'object') {
       throw new Error(`unexpected schema type ${def.type}. Expecting "object"`);
     }
@@ -175,8 +178,11 @@ export class TypeGenerator {
 
       for (const option of def.oneOf || def.anyOf || []) {        
         let type = ''
+        console.log({option})
         if (option.$ref) {
           type = this.typeForRef(option);
+        } else if (option.enum) {
+          type = 'Enum'
         } else {
           type = option.type === 'integer' ? 'number' : option.type as string;
 
@@ -272,17 +278,20 @@ export class TypeGenerator {
     const prefix = '#/definitions/';
     console.log({ref: def.$ref})
     if (!def.$ref || !def.$ref.startsWith(prefix)) {
-      throw new Error(`invalid $ref`);
-    }
+      console.log('local reference')
 
-    if (this.isExcluded(def.$ref)) {
-      return 'any';
-    }
+      if (!def.$ref) return 'any';
 
-    const comps = def.$ref.substring(prefix.length).split('.');
-    const typeName = comps[comps.length - 1];
-    const schema = this.resolveReference(def);
-    return this.emitType(typeName, schema, def.$ref);
+      const comps = def.$ref.substring(prefix.length).split('.');
+      const typeName = comps[comps.length - 1];
+      const schema = this.resolveReference(def);
+      return this.emitType(typeName, schema, def.$ref);
+    } else {
+      const comps = def.$ref.substring(prefix.length).split('.');
+      const typeName = comps[comps.length - 1];
+      const schema = this.resolveReference(def);
+      return this.emitType(typeName, schema, def.$ref);
+    }
   }
 
   private typeForArray(propertyFqn: string, def: JSONSchema4): string {
@@ -295,16 +304,20 @@ export class TypeGenerator {
 
   private resolveReference(def: JSONSchema4): JSONSchema4 {
     const ref = def.$ref;
-    if (!ref || !ref.startsWith(DEFINITIONS_PREFIX)) {
-      throw new Error(`expecting a local reference`);
+    let found = undefined;    
+    if (!ref) {      
+      throw new Error('no reference found')
     }
+    const parts = ref?.split("#") || []
+    const schema = this.schema.get(parts[0] || '') as JSONSchema4
+    const lookup = (parts[1] || '').substr('/definitions/'.length);
 
-    if (!this.schema.definitions) {
+    if (!schema.definitions) {
       throw new Error(`schema does not have "definitions"`);
     }
 
-    const lookup = ref.substr(DEFINITIONS_PREFIX.length);
-    const found = this.schema.definitions[lookup];
+    found = schema.definitions[lookup];
+
     if (!found) {
       throw new Error(`cannot resolve local reference ${ref}`);
     }
