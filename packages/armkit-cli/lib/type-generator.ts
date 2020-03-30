@@ -1,8 +1,7 @@
-import { JSONSchema4 } from "json-schema";
+import { JSONSchema4, JSONSchema4Type } from "json-schema";
 import { CodeMaker, toPascalCase } from "codemaker";
+import { constantCase } from "change-case";
 import $RefParser = require("@apidevtools/json-schema-ref-parser");
-
-const DEFINITIONS_PREFIX = '#/definitions/';
 
 export interface TypeGeneratorOptions {
   exclude?: string[];
@@ -17,11 +16,8 @@ export interface GeneratedConstruct {
 export class TypeGenerator {
   private readonly typesToEmit: { [name: string]: (code: CodeMaker) => void } = { };
   private readonly emittedTypes = new Set<string>();
-  private readonly exclude: string[];
 
-  constructor(private readonly schema: $RefParser.$Refs, options: TypeGeneratorOptions = { }) {
-    this.exclude = options.exclude || [];
-  }
+  constructor(private readonly schema: $RefParser.$Refs) {}
 
   public emitConstruct(def: GeneratedConstruct) {
     this.emitLater(def.kind, code => {
@@ -30,11 +26,7 @@ export class TypeGenerator {
 
       const options = createOptionsStructSchema();
 
-      this.emitType(optionsStructName, options, def.fqn);
-
-
-
-      
+      this.emitType(optionsStructName, options, def.fqn)
 
       emitConstruct();
 
@@ -53,7 +45,7 @@ export class TypeGenerator {
         code.line(` *`);
         code.line(` * @schema ${def.fqn}`)
         code.line(` */`);
-        code.openBlock(`export class ${def.kind} extends ApiObject`);
+        code.openBlock(`export class ${def.kind} extends armkit.ArmConstruct`);
     
         emitInitializer();
       
@@ -63,7 +55,7 @@ export class TypeGenerator {
       function emitInitializer() {
   
         code.line(`/**`);
-        code.line(` * Defines a "${def.fqn}" API object`);
+        code.line(` * Defines a "${def.fqn}" Arm Template object`);
         code.line(` * @param scope the scope in which to define this object`);
         code.line(` * @param name a scope-local name for the object`);
         code.line(` * @param options configuration options`);
@@ -89,16 +81,6 @@ export class TypeGenerator {
   public emitType(typeName: string, def: JSONSchema4, structFqn: string): string {
     typeName = normalizeTypeName(typeName);
 
-    console.log({typeName})
-
-    if (structFqn.startsWith(DEFINITIONS_PREFIX)) {
-      structFqn = structFqn.substring(DEFINITIONS_PREFIX.length);
-    }
-
-    if (this.isExcluded(structFqn)) {
-      throw new Error(`Type ${structFqn} cannot be added since it matches one of the exclusion patterns`);
-    }
-
     if (def.$ref) {
       return this.typeForRef(def);
     }
@@ -112,7 +94,7 @@ export class TypeGenerator {
     if (def.type === 'string' && def.format === 'date-time') {
       return `Date`;
     }
-  
+
     switch (def.type) {
       case undefined: return 'string';
       case 'boolean': return 'boolean';
@@ -128,6 +110,11 @@ export class TypeGenerator {
     if (def.type === 'string') {
       if (def.format === 'date-time') {
         return 'Date';
+      }
+
+      if (def.pattern) {
+        this.emitPattern(`${typeName}Pattern`, def, structFqn)
+        return `${typeName}Pattern`
       }
 
       return 'string';
@@ -173,22 +160,31 @@ export class TypeGenerator {
   private emitUnion(typeName: string, def: JSONSchema4, fqn: string) {
     this.emitLater(typeName, code => {
       this.emitDescription(code, fqn, def.description);
-
+      let list = ''
       code.openBlock(`export class ${typeName}`);
-
+      console.log
       for (const option of def.oneOf || def.anyOf || []) {        
+        if (!option.enum && option.type === 'array') list = '[]';
         let type = ''
-        console.log({option})
         if (option.$ref) {
           type = this.typeForRef(option);
+          console.log({union: type})
         } else if (option.enum) {
-          type = 'Enum'
+          type = this.emitEnum(`${typeName}Enum`, option.enum)
+        } else if (!option.enum && option.type === 'array') {
+          if (!option.items) type = 'any';
+          const items = option.items as any
+          if (items.$ref) {
+            console.log({ref: this.typeForRef(items)})
+            type = this.typeForRef(items);
+          } else {
+            type = items.type
+          }
         } else {
           type = option.type === 'integer' ? 'number' : option.type as string;
-
         }
         const methodName = 'from' + type[0].toUpperCase() + type.substr(1);
-        code.openBlock(`public static ${methodName}(value: ${type}): ${typeName}`);
+        code.openBlock(`public static ${methodName}(value: ${type}${list}): ${typeName}`);
         code.line(`return new ${typeName}(value);`);
         code.closeBlock();
       }
@@ -200,6 +196,35 @@ export class TypeGenerator {
       code.closeBlock();
     });
   }
+
+  private emitEnum(typeName: string, values: JSONSchema4Type[]) {
+    this.emitLater(typeName, code => {
+      code.openBlock(`export enum ${typeName}`);
+      values.forEach((v) => {
+        code.line(`${constantCase(v as string)} = '${v}',`)
+      })
+      code.closeBlock();
+    });
+
+    return typeName
+  }
+
+  // { type: 'string',
+  // pattern: '^\\[([^\\[].*)?\\]$',
+  // description:
+  //  'Deployment template expression. See https://aka.ms/arm-template-expressions for more details on the ARM expression syntax.' }
+
+  private emitPattern(typeName: string, structDef: JSONSchema4, structFqn: string) {
+    this.emitLater(typeName, code => {      
+      this.emitDescription(code, structFqn, structDef.description);
+      code.openBlock(`export class ${typeName}`);
+        code.openBlock(`public static pattern(value: string): string`);
+          code.line(`return value;`);
+        code.closeBlock();
+      code.closeBlock();
+    });
+  }
+
 
   private emitStruct(typeName: string, structDef: JSONSchema4, structFqn: string) {
     this.emitLater(typeName, code => {
@@ -275,26 +300,14 @@ export class TypeGenerator {
   }
 
   private typeForRef(def: JSONSchema4): string {
-    const prefix = '#/definitions/';
-    console.log({ref: def.$ref})
-    if (!def.$ref || !def.$ref.startsWith(prefix)) {
-      console.log('local reference')
-
-      if (!def.$ref) return 'any';
-
-      const comps = def.$ref.substring(prefix.length).split('.');
-      const typeName = comps[comps.length - 1];
-      const schema = this.resolveReference(def);
-      return this.emitType(typeName, schema, def.$ref);
-    } else {
-      const comps = def.$ref.substring(prefix.length).split('.');
-      const typeName = comps[comps.length - 1];
-      const schema = this.resolveReference(def);
-      return this.emitType(typeName, schema, def.$ref);
-    }
+    if (!def.$ref) return 'any';    
+    const parts = def.$ref?.split("#") || []    
+    const typeName = (parts[1] || '').substr('/definitions/'.length);
+    const schema = this.resolveReference(def);
+    return this.emitType(typeName, schema, def.$ref);
   }
 
-  private typeForArray(propertyFqn: string, def: JSONSchema4): string {
+  private typeForArray(propertyFqn: string, def: JSONSchema4): string {    
     if (!def.items || typeof(def.items) !== 'object') {
       throw new Error(`unsupported array type ${def.items}`);
     }
@@ -327,17 +340,6 @@ export class TypeGenerator {
 
   private isPropertyRequired(property: string, structDef: JSONSchema4) {
     return Array.isArray(structDef.required) && structDef.required.includes(property);
-  }
-
-  private isExcluded(fqn: string) {
-    for (const pattern of this.exclude) {
-      const re = new RegExp(pattern);
-      if (re.test(fqn)) {
-        return true;
-      }
-    }
-
-    return false;
   }
 }
 
