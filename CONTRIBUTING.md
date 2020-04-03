@@ -1,4 +1,4 @@
-# Contributing to the AWS Cloud Development Kit
+# Contributing to the Azure Cloud Development Kit
 
 Thanks for your interest in contributing to the AZURE CDK! ❤️
 
