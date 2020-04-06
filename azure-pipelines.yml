@@ -10,8 +10,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: yarn build
+  displayName: 'Run yarn build in root_folder'
 
 - script: |
     echo Add other tasks to build, test, and deploy your project.
