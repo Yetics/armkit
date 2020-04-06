@@ -12,8 +12,6 @@ pool:
 steps:
 - script: npm install
   displayName: 'Run npm install in root_folder'
-
-steps:
 - script: yarn build
   displayName: 'Run yarn build in root_folder'
 
