@@ -14,6 +14,6 @@ steps:
   displayName: 'Run yarn build in root_folder'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    cd examples/basic/
+    ./node_modules/armkit-cli/bin/armkit generate
+  displayName: 'Run armkit generate'
