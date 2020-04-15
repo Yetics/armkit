@@ -1,0 +1,5 @@
+.vscode/
+**/.generated
+**/*.d.ts
+**/*.js
+**/node_modules
