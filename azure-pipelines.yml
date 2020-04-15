@@ -19,9 +19,17 @@ jobs:
       inputs:
         versionSpec: '13.x' 
         checkLatest: true
-    # arnkit generate run      
     - script: |
-        cd examples/basic/ && npm install && yarn
+        pwd
+        ls -l 
+      workingDirectory: $(Agent.BuildDirectory)
+      displayName: List contents of a folder
+    # arnkit generate run      
+    - bash: |
+        set -x
+        cd examples/basic/
+        pwd
+        npm install && yarn
         ./node_modules/armkit-cli/bin/armkit generate
       displayName: 'Run armkit generate' 
 
