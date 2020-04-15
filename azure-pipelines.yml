@@ -19,16 +19,9 @@ jobs:
       inputs:
         versionSpec: '13.x' 
         checkLatest: true
-    # npm dpendencies installer
-    - script: npm install
-      workingDirectory: $(Agent.BuildDirectory)/examples/basic/
-      displayName: 'Run npm install in root_folder'
-    # yarn setup installer
-    - script: yarn
-      workingDirectory: $(Agent.BuildDirectory)/examples/basic/
-      displayName: 'Run yarn build in root_folder'
     # arnkit generate run      
-    - script: ./node_modules/armkit-cli/bin/armkit generate
+    - script: |
+        cd examples/basic/ && npm install && yarn
+        ./node_modules/armkit-cli/bin/armkit generate
       displayName: 'Run armkit generate' 
-      workingDirectory: $(Agent.BuildDirectory)/examples/basic/
 
