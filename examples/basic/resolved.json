@@ -1,5 +1,5 @@
 {
-  "/Users/sebastian/projects/armkit/examples/basic/": {
+  "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/": {
     "id": "https://schema.management.azure.com/schemas/2015-04-01/Microsoft.DomainRegistration.json#",
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Microsoft.DomainRegistration",
@@ -36,7 +36,7 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/domains_domainOwnershipIdentifiers_childResource"
+                  "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/domains_domainOwnershipIdentifiers_childResource"
                 }
               ]
             }
@@ -67,7 +67,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/DomainOwnershipIdentifier_properties"
+                "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/DomainOwnershipIdentifier_properties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -128,7 +128,7 @@
           "addressMailing": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/Address"
+                "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/Address"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -183,7 +183,7 @@
           "contactAdmin": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/Contact"
+                "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/Contact"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -194,7 +194,7 @@
           "contactBilling": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/Contact"
+                "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/Contact"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -205,7 +205,7 @@
           "contactRegistrant": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/Contact"
+                "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/Contact"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -216,7 +216,7 @@
           "contactTech": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/Contact"
+                "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/Contact"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -268,7 +268,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/HostName"
+                  "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/HostName"
                 }
               },
               {
@@ -280,7 +280,7 @@
           "consent": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/DomainPurchaseConsent"
+                "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/DomainPurchaseConsent"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -367,7 +367,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/DomainOwnershipIdentifier_properties"
+                "$ref": "/home/aheumaier/Codebox/Armkit/armkit/examples/basic/#/definitions/DomainOwnershipIdentifier_properties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"

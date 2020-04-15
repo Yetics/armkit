@@ -17,14 +17,18 @@ jobs:
     # Finds or downloads and caches the specified version spec of Node.js and adds it to the PATH
     - task: NodeTool@0
       inputs:
-        versionSpec: '10.x' 
+        versionSpec: '13.x' 
         checkLatest: true
+    # npm dpendencies installer
     - script: npm install
+      workingDirectory: $(Agent.BuildDirectory)/examples/basic/
       displayName: 'Run npm install in root_folder'
+    # yarn setup installer
     - script: yarn
+      workingDirectory: $(Agent.BuildDirectory)/examples/basic/
       displayName: 'Run yarn build in root_folder'
-    - script: |
-        cd examples/basic/
-        ./node_modules/armkit-cli/bin/armkit generate
+    # arnkit generate run      
+    - script: ./node_modules/armkit-cli/bin/armkit generate
       displayName: 'Run armkit generate' 
+      workingDirectory: $(Agent.BuildDirectory)/examples/basic/
 
