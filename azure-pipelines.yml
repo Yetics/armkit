@@ -13,6 +13,12 @@ jobs:
   pool:
     vmImage: 'ubuntu-18.04'
   steps:
+    # Node.js tool installer
+    # Finds or downloads and caches the specified version spec of Node.js and adds it to the PATH
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '10.x' 
+        checkLatest: true
     - script: npm install
       displayName: 'Run npm install in root_folder'
     - script: yarn
