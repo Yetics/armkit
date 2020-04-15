@@ -8,7 +8,7 @@ trigger:
 - devopment
 
 jobs:
-- job: myJob
+- job: armkit-generate
   timeoutInMinutes: 10
   pool:
     vmImage: 'ubuntu-18.04'
