@@ -85,24 +85,9 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
-"armkit-cli@file:../../packages/armkit-cli":
+"armkit-cli@link:../../packages/armkit-cli":
   version "0.0.0"
-  dependencies:
-    "@apidevtools/json-schema-ref-parser" "^8.0.0"
-    "@aws-cdk/core" "^1.27.0"
-    "@types/change-case" "^2.3.1"
-    "@types/json-schema" "^7.0.4"
-    "@types/node" "^13.7.7"
-    "@types/yargs" "^15.0.4"
-    async-parallel "^1.2.3"
-    change-case "^4.1.1"
-    codemaker "^1.0.0"
-    fs "^0.0.1-security"
-    fs-extra "^8.1.0"
-    json-schema "^0.2.5"
-    path "^0.12.7"
-    typescript "^3.8.3"
-    yargs "^15.1.0"
+  uid ""
 
 async-parallel@^1.2.3:
   version "1.2.3"

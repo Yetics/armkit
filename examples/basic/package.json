@@ -11,6 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "typescript": "^3.8.3",
-    "armkit-cli": "file:../../packages/armkit-cli"
+    "armkit-cli": "link:../../packages/armkit-cli"
   }
 }
