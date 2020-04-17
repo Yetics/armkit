@@ -7,4 +7,4 @@ WORKDIR /app
 RUN yarn install 
 RUN yarn build
 
-RUN cd examples/basic && yarn && $(yarn bin armkit) generate
+RUN cd examples/basic && yarn generate

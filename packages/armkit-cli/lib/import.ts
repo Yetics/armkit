@@ -129,6 +129,8 @@ interface DeploymentObjectDefinition extends DeploymentObjectName {
 }
 
 async function downloadSchema(_inputFile: string) {
-  const output = readFileSync(path.join(process.cwd(), 'full-schema.json'))
+  // console.log('The value of _inputFile is:',_inputFile)
+  const SCHEMA = process.env.SCHEMA_DEFINITION || 'schema.json';
+  const output = readFileSync(path.join(process.cwd(), SCHEMA))
   return JSON.parse(output.toString()) as JSONSchema4;
 }
