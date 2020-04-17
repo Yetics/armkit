@@ -2,8 +2,8 @@ import { CodeMaker } from 'codemaker';
 import { JSONSchema4 } from 'json-schema';
 import { TypeGenerator } from './type-generator';
 import { ImportBase } from './base';
-// import { httpsGet } from './util';
-import { readFileSync, writeFileSync } from 'fs-extra'
+import { httpsGet } from './util';
+import { writeFileSync } from 'fs-extra'
 import * as path from 'path'
 import * as $RefParser from "@apidevtools/json-schema-ref-parser";
 
@@ -128,9 +128,8 @@ interface DeploymentObjectDefinition extends DeploymentObjectName {
   schema: JSONSchema4;
 }
 
-async function downloadSchema(_inputFile: string) {
-  // console.log('The value of _inputFile is:',_inputFile)
-  const SCHEMA = process.env.SCHEMA_DEFINITION || 'schema.json';
-  const output = readFileSync(path.join(process.cwd(), SCHEMA))
+async function downloadSchema(schemaVersion: string) {
+  const SCHEMA_URL = process.env.SCHEMA_DEFINITION_URL || `https://schema.management.azure.com/schemas/${schemaVersion}/deploymentTemplate.json`;
+  const output = await httpsGet(SCHEMA_URL)
   return JSON.parse(output.toString()) as JSONSchema4;
 }

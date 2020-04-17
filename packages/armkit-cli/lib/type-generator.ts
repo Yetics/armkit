@@ -120,6 +120,11 @@ export class TypeGenerator {
       return 'string';
     }
 
+    if (Array.isArray(def.type)) {
+      console.log({type: def.type})
+      return 'any';
+    }
+
     if (def.type !== 'object') {
       throw new Error(`unexpected schema type ${def.type}. Expecting "object"`);
     }
@@ -309,7 +314,8 @@ export class TypeGenerator {
 
   private typeForArray(propertyFqn: string, def: JSONSchema4): string {    
     if (!def.items || typeof(def.items) !== 'object') {
-      throw new Error(`unsupported array type ${def.items}`);
+      return 'any';
+      // throw new Error(`unsupported array type ${def.items}`);
     }
 
     return this.typeForProperty(propertyFqn, def.items);
