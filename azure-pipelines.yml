@@ -24,6 +24,6 @@ jobs:
         set -x
         yarn install
         yarn build
-        cd examples/basic && yarn && node_modules/armkit-cli/bin/armkit generate
+        cd examples/basic && yarn generate
       displayName: 'Run armkit generate' 
 
