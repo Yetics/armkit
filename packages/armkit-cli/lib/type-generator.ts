@@ -35,10 +35,10 @@ export class TypeGenerator {
 
         copy.required = copy.required || [];
         copy.required = copy.required.filter(x => x !== 'apiVersion' && x !== 'kind' && x !== 'status');
-    
+
         return copy;
       }
-    
+
       function emitConstruct() {
         code.line('/**');
         code.line(` * ${def.schema.description}`);
@@ -46,34 +46,34 @@ export class TypeGenerator {
         code.line(` * @schema ${def.fqn}`)
         code.line(` */`);
         code.openBlock(`export class ${def.kind} extends armkit.ArmConstruct`);
-    
+
         emitInitializer();
-      
+
         code.closeBlock();
       }
-    
+
       function emitInitializer() {
-  
+
         code.line(`/**`);
         code.line(` * Defines a "${def.fqn}" Arm Template object`);
         code.line(` * @param scope the scope in which to define this object`);
         code.line(` * @param name a scope-local name for the object`);
         code.line(` * @param options configuration options`);
         code.line(` */`);
-    
+
         const hasRequired = schema.required && Array.isArray(schema.required) && schema.required.length > 0;
         const defaultOptions = hasRequired ? '' : ' = {}';
         code.openBlock(`public constructor(scope: Construct, name: string, options: ${optionsStructName}${defaultOptions})`);
         emitInitializerSuper();
-    
+
         code.closeBlock();
       }
-    
+
       function emitInitializerSuper() {
         code.open(`super(scope, name, {`);
         code.line(`...options,`);
-        code.line(`kind: '${def.kind}',`);        
-        code.close(`});`);    
+        code.line(`kind: '${def.kind}',`);
+        code.close(`});`);
       }
     });
   }
@@ -151,7 +151,7 @@ export class TypeGenerator {
       code.line();
       delete this.typesToEmit[name];
       this.emittedTypes.add(name);
-    }    
+    }
   }
 
   private emitLater(typeName: string, codeEmitter: (code: CodeMaker) => void) {
@@ -168,7 +168,7 @@ export class TypeGenerator {
       let list = ''
       code.openBlock(`export class ${typeName}`);
       console.log
-      for (const option of def.oneOf || def.anyOf || []) {        
+      for (const option of def.oneOf || def.anyOf || []) {
         if (!option.enum && option.type === 'array') list = '[]';
         let type = ''
         if (option.$ref) {
@@ -182,12 +182,25 @@ export class TypeGenerator {
           if (items.$ref) {
             console.log({ref: this.typeForRef(items)})
             type = this.typeForRef(items);
-          } else {
+          } else if (items.type) {
             type = items.type
           }
+          else {
+            type = 'any'
+          }
+        } else if (option.properties) {
+          type = `${typeName}Options`
+          this.emitStruct(typeName, option, `${typeName}Options`)
+        } else if (Array.isArray(option.type) || option.required) {
+          type = 'any'
         } else {
-          type = option.type === 'integer' ? 'number' : option.type as string;
+          if (option.type) {
+            type = option.type === 'integer' ? 'number' : option.type as string;
+          } else {
+            type = 'any'
+          }
         }
+        console.log({type, typeName, fqn, def: JSON.stringify(def)})
         const methodName = 'from' + type[0].toUpperCase() + type.substr(1);
         code.openBlock(`public static ${methodName}(value: ${type}${list}): ${typeName}`);
         code.line(`return new ${typeName}(value);`);
@@ -206,7 +219,8 @@ export class TypeGenerator {
     this.emitLater(typeName, code => {
       code.openBlock(`export enum ${typeName}`);
       values.forEach((v) => {
-        code.line(`${constantCase(v as string)} = '${v}',`)
+        console.log({v})
+        code.line(`${constantCase(`${v}`)} = '${v}',`)
       })
       code.closeBlock();
     });
@@ -220,7 +234,7 @@ export class TypeGenerator {
   //  'Deployment template expression. See https://aka.ms/arm-template-expressions for more details on the ARM expression syntax.' }
 
   private emitPattern(typeName: string, structDef: JSONSchema4, structFqn: string) {
-    this.emitLater(typeName, code => {      
+    this.emitLater(typeName, code => {
       this.emitDescription(code, structFqn, structDef.description);
       code.openBlock(`export class ${typeName}`);
         code.openBlock(`public static pattern(value: string): string`);
@@ -237,14 +251,14 @@ export class TypeGenerator {
       code.openBlock(`export interface ${typeName}`);
 
       for (const [ propName, propSpec ] of Object.entries(structDef.properties || {})) {
-  
+
         if (propName.startsWith('x-')) {
           continue; // skip extensions for now
         }
-  
+
         this.emitProperty(code, propName, propSpec, structFqn, structDef);
       }
-    
+
       code.closeBlock();
     });
   }
@@ -281,7 +295,7 @@ export class TypeGenerator {
 
       const extractDefault = /Defaults?\W+(to|is)\W+(.+)/g.exec(description);
       const def = extractDefault && extractDefault[2];
-    
+
       code.line(` * ${description}`);
       if (def) {
         annotations['default'] = def;
@@ -305,26 +319,26 @@ export class TypeGenerator {
   }
 
   private typeForRef(def: JSONSchema4): string {
-    if (!def.$ref) return 'any';    
-    const parts = def.$ref?.split("#") || []    
+    if (!def.$ref) return 'any';
+    const parts = def.$ref?.split("#") || []
     const typeName = (parts[1] || '').substr('/definitions/'.length);
     const schema = this.resolveReference(def);
     return this.emitType(typeName, schema, def.$ref);
   }
 
-  private typeForArray(propertyFqn: string, def: JSONSchema4): string {    
+  private typeForArray(propertyFqn: string, def: JSONSchema4): string {
     if (!def.items || typeof(def.items) !== 'object') {
       return 'any';
       // throw new Error(`unsupported array type ${def.items}`);
     }
 
     return this.typeForProperty(propertyFqn, def.items);
-  }  
+  }
 
   private resolveReference(def: JSONSchema4): JSONSchema4 {
     const ref = def.$ref;
-    let found = undefined;    
-    if (!ref) {      
+    let found = undefined;
+    if (!ref) {
       throw new Error('no reference found')
     }
     const parts = ref?.split("#") || []
