@@ -1,0 +1,16 @@
+{
+  "resource": {
+    "storageAccounts": {
+      "helloarmkitMyStorageC04E4612": {
+        "name": "my-storage",
+        "type": "Microsoft.Storage/storageAccounts",
+        "sku": {
+          "name": "Standard_RAGRS",
+          "tier": "Premium"
+        },
+        "location": "foo",
+        "armResourceType": "storageAccounts"
+      }
+    }
+  }
+}

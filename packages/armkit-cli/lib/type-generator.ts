@@ -43,7 +43,7 @@ export class TypeGenerator {
         code.line(` *`);
         code.line(` * @schema ${def.fqn}`)
         code.line(` */`);
-        code.openBlock(`export class ${def.kind} extends armkit.ArmConstruct`);
+        code.openBlock(`export class ${def.kind} extends ArmResource`);
 
         emitInitializer();
 
@@ -63,14 +63,13 @@ export class TypeGenerator {
         const defaultOptions = hasRequired ? '' : ' = {}';
         code.openBlock(`public constructor(scope: Construct, name: string, options: ${optionsStructName}${defaultOptions})`);
         emitInitializerSuper();
-
         code.closeBlock();
       }
 
       function emitInitializerSuper() {
         code.open(`super(scope, name, {`);
         code.line(`...options,`);
-        code.line(`kind: '${def.kind}',`);
+        code.line(`armResourceType: '${def.kind}',`);
         code.close(`});`);
       }
     });
