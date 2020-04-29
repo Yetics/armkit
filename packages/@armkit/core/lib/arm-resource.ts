@@ -1,5 +1,5 @@
 
-import { Construct, Node } from 'constructs'
+import { Construct } from 'constructs'
 import { ArmElement } from './arm-element';
 
 interface ArmResourceProps {
@@ -20,12 +20,6 @@ export abstract class ArmResource extends ArmElement {
   // protected abstract synthesizeAttributes(): { [name: string]: any };
 
   public toArm(): any {
-    return {
-      resource: {
-        [this.armResourceType]: {
-          [Node.of(this).uniqueId]: this._armProperties
-        }
-      }
-    };
+    return Object.assign({}, this._armProperties, {apiVersion: '2017-06-01'})
   }
 }
