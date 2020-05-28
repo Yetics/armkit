@@ -1,0 +1,60 @@
+{
+  "name": "@armkit/core",
+  "version": "0.0.0",
+  "description": "armkit",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "eslint . --ext .ts",
+    "test": "jest && yarn lint",
+    "package": "./package.sh"
+  },
+  "keywords": [
+    "armkit",
+    "cdk",
+    "cloud",
+    "azure"
+  ],
+  "license": "Apache-2.0",
+  "jest": {
+    "collectCoverage": true,
+    "moduleFileExtensions": [
+      "js"
+    ]
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": 0,
+      "@typescript-eslint/explicit-function-return-type": 0,
+      "@typescript-eslint/no-use-before-define": 0,
+      "@typescript-eslint/camelcase": 0,
+      "@typescript-eslint/no-this-alias": 0
+    },
+    "ignorePatterns": [
+      "node_modules",
+      "dist",
+      "coverage"
+    ]
+  },
+  "dependencies": {
+    "@types/node": "^13.13.4",
+    "constructs": "^3.0.2",
+    "typescript": "^3.8.3",
+    "yargs": "^15.1.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "@typescript-eslint/parser": "^2.22.0",
+    "jest": "^25.1.0"
+  }
+}

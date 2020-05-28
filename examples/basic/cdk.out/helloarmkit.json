@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "0.1.0.0",
+  "apiProfile": "2018-06-01-profile",
+  "parameters": {},
+  "variables": {},
+  "functions": [],
+  "resources": [
+    {
+      "properties": {
+        "accessTier": "Hot"
+      },
+      "name": "mystorage452452kda",
+      "type": "Microsoft.Storage/storageAccounts",
+      "sku": {
+        "name": "Standard_RAGRS"
+      },
+      "location": "foo",
+      "kind": "BlobStorage",
+      "apiVersion": "2017-06-01"
+    }
+  ],
+  "outputs": {}
+}

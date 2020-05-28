@@ -1,5 +1,5 @@
 {
-  "/Users/sebastian/projects/armkit/examples/basic/": {
+  "/Users/sebastian/projects/armkit/packages/armkit-cli/": {
     "id": "https://schema.management.azure.com/schemas/2019-06-01/Microsoft.Storage.json#",
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Microsoft.Storage",
@@ -29,7 +29,7 @@
           "sku": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/Sku"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/Sku"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -76,7 +76,7 @@
           "identity": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/Identity"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/Identity"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -87,7 +87,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/StorageAccountPropertiesCreateParameters"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/StorageAccountPropertiesCreateParameters"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -100,16 +100,16 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_fileServices_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_fileServices_childResource"
                 },
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_blobServices_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_blobServices_childResource"
                 },
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_privateEndpointConnections_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_privateEndpointConnections_childResource"
                 },
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_managementPolicies_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_managementPolicies_childResource"
                 }
               ]
             }
@@ -157,7 +157,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/BlobServicePropertiesProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/BlobServicePropertiesProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -170,7 +170,7 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_blobServices_containers_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_blobServices_containers_childResource"
                 }
               ]
             }
@@ -207,7 +207,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ContainerProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ContainerProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -220,7 +220,7 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_blobServices_containers_immutabilityPolicies_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_blobServices_containers_immutabilityPolicies_childResource"
                 }
               ]
             }
@@ -265,7 +265,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ImmutabilityPolicyProperty"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ImmutabilityPolicyProperty"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -314,7 +314,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/FileServicePropertiesProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/FileServicePropertiesProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -327,7 +327,7 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_fileServices_shares_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_fileServices_shares_childResource"
                 }
               ]
             }
@@ -364,7 +364,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/FileShareProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/FileShareProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -412,7 +412,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ManagementPolicyProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ManagementPolicyProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -450,7 +450,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/PrivateEndpointConnectionProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/PrivateEndpointConnectionProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -528,7 +528,7 @@
           "activeDirectoryProperties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ActiveDirectoryProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ActiveDirectoryProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -548,7 +548,7 @@
           "cors": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/CorsRules"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/CorsRules"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -563,7 +563,7 @@
           "deleteRetentionPolicy": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/DeleteRetentionPolicy"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/DeleteRetentionPolicy"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -585,7 +585,7 @@
           "changeFeed": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ChangeFeed"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ChangeFeed"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -746,7 +746,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/CorsRule"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/CorsRule"
                 }
               },
               {
@@ -860,7 +860,7 @@
           "services": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/EncryptionServices"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/EncryptionServices"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -886,7 +886,7 @@
           "keyvaultproperties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/KeyVaultProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/KeyVaultProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -938,7 +938,7 @@
           "blob": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/EncryptionService"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/EncryptionService"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -949,7 +949,7 @@
           "file": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/EncryptionService"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/EncryptionService"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -960,7 +960,7 @@
           "table": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/EncryptionService"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/EncryptionService"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -971,7 +971,7 @@
           "queue": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/EncryptionService"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/EncryptionService"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -988,7 +988,7 @@
           "cors": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/CorsRules"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/CorsRules"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -999,7 +999,7 @@
           "shareDeleteRetentionPolicy": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/DeleteRetentionPolicy"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/DeleteRetentionPolicy"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1130,7 +1130,7 @@
           "baseBlob": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ManagementPolicyBaseBlob"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ManagementPolicyBaseBlob"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1141,7 +1141,7 @@
           "snapshot": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ManagementPolicySnapShot"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ManagementPolicySnapShot"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1158,7 +1158,7 @@
           "tierToCool": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/DateAfterModification"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/DateAfterModification"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1169,7 +1169,7 @@
           "tierToArchive": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/DateAfterModification"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/DateAfterModification"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1180,7 +1180,7 @@
           "delete": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/DateAfterModification"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/DateAfterModification"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1197,7 +1197,7 @@
           "actions": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ManagementPolicyAction"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ManagementPolicyAction"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1208,7 +1208,7 @@
           "filters": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ManagementPolicyFilter"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ManagementPolicyFilter"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1265,7 +1265,7 @@
           "policy": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ManagementPolicySchema"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ManagementPolicySchema"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1307,7 +1307,7 @@
           "definition": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ManagementPolicyDefinition"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ManagementPolicyDefinition"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1331,7 +1331,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ManagementPolicyRule"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ManagementPolicyRule"
                 }
               },
               {
@@ -1352,7 +1352,7 @@
           "delete": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/DateAfterCreation"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/DateAfterCreation"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1388,7 +1388,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/VirtualNetworkRule"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/VirtualNetworkRule"
                 }
               },
               {
@@ -1402,7 +1402,7 @@
               {
                 "type": "array",
                 "items": {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/IPRule"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/IPRule"
                 }
               },
               {
@@ -1441,7 +1441,7 @@
           "privateEndpoint": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/PrivateEndpoint"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/PrivateEndpoint"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1452,7 +1452,7 @@
           "privateLinkServiceConnectionState": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/PrivateLinkServiceConnectionState"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/PrivateLinkServiceConnectionState"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1605,7 +1605,7 @@
           "customDomain": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/CustomDomain"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/CustomDomain"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1616,7 +1616,7 @@
           "encryption": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/Encryption"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/Encryption"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1627,7 +1627,7 @@
           "networkAcls": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/NetworkRuleSet"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/NetworkRuleSet"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1653,7 +1653,7 @@
           "azureFilesIdentityBasedAuthentication": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/AzureFilesIdentityBasedAuthentication"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/AzureFilesIdentityBasedAuthentication"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1701,7 +1701,7 @@
           "routingPreference": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/RoutingPreference"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/RoutingPreference"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1744,7 +1744,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/BlobServicePropertiesProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/BlobServicePropertiesProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1757,7 +1757,7 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_blobServices_containers_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_blobServices_containers_childResource"
                 }
               ]
             }
@@ -1792,7 +1792,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ContainerProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ContainerProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1805,7 +1805,7 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_blobServices_containers_immutabilityPolicies_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_blobServices_containers_immutabilityPolicies_childResource"
                 }
               ]
             }
@@ -1850,7 +1850,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ImmutabilityPolicyProperty"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ImmutabilityPolicyProperty"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1898,7 +1898,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/FileServicePropertiesProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/FileServicePropertiesProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1911,7 +1911,7 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/storageAccounts_fileServices_shares_childResource"
+                  "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/storageAccounts_fileServices_shares_childResource"
                 }
               ]
             }
@@ -1946,7 +1946,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/FileShareProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/FileShareProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -1994,7 +1994,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/ManagementPolicyProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/ManagementPolicyProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
@@ -2032,7 +2032,7 @@
           "properties": {
             "oneOf": [
               {
-                "$ref": "/Users/sebastian/projects/armkit/examples/basic/#/definitions/PrivateEndpointConnectionProperties"
+                "$ref": "/Users/sebastian/projects/armkit/packages/armkit-cli/#/definitions/PrivateEndpointConnectionProperties"
               },
               {
                 "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"

@@ -21,11 +21,9 @@ export class TypeGenerator {
 
   public emitConstruct(def: GeneratedConstruct) {
     this.emitLater(def.kind, code => {
-      const optionsStructName = `${def.kind}Options`;
       const schema = def.schema;
-
+      const optionsStructName = `${def.kind}Options`;
       const options = createOptionsStructSchema();
-
       this.emitType(optionsStructName, options, def.fqn)
 
       emitConstruct();
@@ -45,7 +43,7 @@ export class TypeGenerator {
         code.line(` *`);
         code.line(` * @schema ${def.fqn}`)
         code.line(` */`);
-        code.openBlock(`export class ${def.kind} extends armkit.ArmConstruct`);
+        code.openBlock(`export class ${def.kind} extends ArmResource`);
 
         emitInitializer();
 
@@ -65,14 +63,13 @@ export class TypeGenerator {
         const defaultOptions = hasRequired ? '' : ' = {}';
         code.openBlock(`public constructor(scope: Construct, name: string, options: ${optionsStructName}${defaultOptions})`);
         emitInitializerSuper();
-
         code.closeBlock();
       }
 
       function emitInitializerSuper() {
         code.open(`super(scope, name, {`);
         code.line(`...options,`);
-        code.line(`kind: '${def.kind}',`);
+        code.line(`armResourceType: '${def.kind}',`);
         code.close(`});`);
       }
     });
@@ -87,8 +84,27 @@ export class TypeGenerator {
 
     // unions
     if (def.oneOf || def.anyOf) {
-      this.emitUnion(typeName, def, structFqn)
-      return typeName;
+      const foo = def.oneOf || def.anyOf
+
+      if (foo === undefined) {
+        throw new Error("undefined shouldnt happen here")
+      }
+
+      const reducer = (accumulator: JSONSchema4[], type: JSONSchema4) => {
+        if (type.$ref && type.$ref.match(/expression$/)) {
+        } else {
+          accumulator.push(type)
+        }
+        return accumulator
+      }
+      const cleanTypes = foo.reduce(reducer, [])
+
+      if (cleanTypes.length > 1) {
+        this.emitUnion(typeName, def, structFqn)
+        return typeName;
+      } else {
+        return this.typeForProperty(typeName, cleanTypes[0])
+      }
     }
 
     if (def.type === 'string' && def.format === 'date-time') {
@@ -117,11 +133,21 @@ export class TypeGenerator {
         return `${typeName}Pattern`
       }
 
+      if (def.enum) {
+        let cleantypeName = typeName
+
+        if (typeName.match("#")) {
+          const parts = typeName.split("#") || []
+          cleantypeName = (parts[1] || '').substr('/definitions/'.length);
+        }
+        console.log({cleantypeName})
+        return this.emitEnum(`${cleantypeName }Enum`, def.enum)
+      }
+
       return 'string';
     }
 
     if (Array.isArray(def.type)) {
-      console.log({type: def.type})
       return 'any';
     }
 
@@ -167,20 +193,24 @@ export class TypeGenerator {
       this.emitDescription(code, fqn, def.description);
       let list = ''
       code.openBlock(`export class ${typeName}`);
-      console.log
       for (const option of def.oneOf || def.anyOf || []) {
         if (!option.enum && option.type === 'array') list = '[]';
         let type = ''
         if (option.$ref) {
           type = this.typeForRef(option);
-          console.log({union: type})
         } else if (option.enum) {
-          type = this.emitEnum(`${typeName}Enum`, option.enum)
+          let cleantypeName = typeName
+
+          if (typeName.match("#")) {
+            const parts = typeName.split("#") || []
+            cleantypeName = (parts[1] || '').substr('/definitions/'.length);
+          }
+
+          type = this.emitEnum(`${cleantypeName}Enum`, option.enum)
         } else if (!option.enum && option.type === 'array') {
           if (!option.items) type = 'any';
           const items = option.items as any
           if (items.$ref) {
-            console.log({ref: this.typeForRef(items)})
             type = this.typeForRef(items);
           } else if (items.type) {
             type = items.type
@@ -189,8 +219,7 @@ export class TypeGenerator {
             type = 'any'
           }
         } else if (option.properties) {
-          type = `${typeName}Options`
-          this.emitStruct(typeName, option, `${typeName}Options`)
+          this.emitStruct(typeName, option, `${typeName}`)
         } else if (Array.isArray(option.type) || option.required) {
           type = 'any'
         } else {
@@ -200,7 +229,6 @@ export class TypeGenerator {
             type = 'any'
           }
         }
-        console.log({type, typeName, fqn, def: JSON.stringify(def)})
         const methodName = 'from' + type[0].toUpperCase() + type.substr(1);
         code.openBlock(`public static ${methodName}(value: ${type}${list}): ${typeName}`);
         code.line(`return new ${typeName}(value);`);
@@ -219,8 +247,9 @@ export class TypeGenerator {
     this.emitLater(typeName, code => {
       code.openBlock(`export enum ${typeName}`);
       values.forEach((v) => {
-        console.log({v})
-        code.line(`${constantCase(`${v}`)} = '${v}',`)
+        const validName = `${v}`.match(/^([a-zA-Z_])+$/) ? constantCase(`${v}`) : `"${constantCase(`${v}`)}"`
+        console.log({validName})
+        code.line(`${validName} = '${v}',`)
       })
       code.closeBlock();
     });
@@ -246,6 +275,7 @@ export class TypeGenerator {
 
 
   private emitStruct(typeName: string, structDef: JSONSchema4, structFqn: string) {
+    console.log({struct: typeName})
     this.emitLater(typeName, code => {
       this.emitDescription(code, structFqn, structDef.description);
       code.openBlock(`export interface ${typeName}`);
@@ -322,6 +352,7 @@ export class TypeGenerator {
     if (!def.$ref) return 'any';
     const parts = def.$ref?.split("#") || []
     const typeName = (parts[1] || '').substr('/definitions/'.length);
+    console.log({ref: typeName})
     const schema = this.resolveReference(def);
     return this.emitType(typeName, schema, def.$ref);
   }
