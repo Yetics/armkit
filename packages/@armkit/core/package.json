@@ -1,10 +1,8 @@
 {
-  "name": "armkit-cli",
+  "name": "@armkit/core",
   "version": "0.0.0",
   "description": "armkit",
-  "bin": {
-    "armkit": "bin/armkit"
-  },
+  "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -49,25 +47,12 @@
     ]
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "^8.0.0",
-    "@aws-cdk/core": "^1.27.0",
-    "@types/change-case": "^2.3.1",
-    "@types/json-schema": "^7.0.4",
-    "@types/node": "^13.7.7",
-    "@types/yargs": "^15.0.4",
-    "async-parallel": "^1.2.3",
-    "change-case": "^4.1.1",
-    "codemaker": "^1.0.0",
-    "fs": "^0.0.1-security",
-    "fs-extra": "^8.1.0",
-    "json-schema": "^0.2.5",
-    "path": "^0.12.7",
+    "@types/node": "^13.13.4",
+    "constructs": "^3.0.2",
     "typescript": "^3.8.3",
     "yargs": "^15.1.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^8.1.0",
-    "@types/jest": "^25.1.4",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
     "jest": "^25.1.0"

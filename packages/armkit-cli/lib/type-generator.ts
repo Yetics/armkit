@@ -1,8 +1,7 @@
-import { JSONSchema4 } from "json-schema";
+import { JSONSchema4, JSONSchema4Type } from "json-schema";
 import { CodeMaker, toPascalCase } from "codemaker";
-
-const PRIMITIVE_TYPES = [ 'string', 'number', 'integer', 'boolean' ];
-const DEFINITIONS_PREFIX = '#/definitions/';
+import { constantCase } from "change-case";
+import $RefParser = require("@apidevtools/json-schema-ref-parser");
 
 export interface TypeGeneratorOptions {
   exclude?: string[];
@@ -10,8 +9,6 @@ export interface TypeGeneratorOptions {
 
 export interface GeneratedConstruct {
   readonly fqn: string;
-  readonly group: string;
-  readonly version: string;
   readonly kind: string;
   readonly schema: JSONSchema4;
 }
@@ -19,74 +16,61 @@ export interface GeneratedConstruct {
 export class TypeGenerator {
   private readonly typesToEmit: { [name: string]: (code: CodeMaker) => void } = { };
   private readonly emittedTypes = new Set<string>();
-  private readonly exclude: string[];
 
-  constructor(private readonly schema: JSONSchema4 = { }, options: TypeGeneratorOptions = { }) {
-    this.exclude = options.exclude || [];
-  }
+  constructor(private readonly schema: $RefParser.$Refs) {}
 
   public emitConstruct(def: GeneratedConstruct) {
     this.emitLater(def.kind, code => {
-      const optionsStructName = `${def.kind}Options`;
       const schema = def.schema;
-
+      const optionsStructName = `${def.kind}Options`;
       const options = createOptionsStructSchema();
-
-      this.emitType(optionsStructName, options, def.fqn);
+      this.emitType(optionsStructName, options, def.fqn)
 
       emitConstruct();
 
       function createOptionsStructSchema() {
         const copy: JSONSchema4 = { ...def.schema };
-        const props = copy.properties = copy.properties || {};
-        delete props.apiVersion;
-        delete props.kind;
-        delete props.status;
-        delete copy['x-kubernetes-group-version-kind'];
-    
+
         copy.required = copy.required || [];
         copy.required = copy.required.filter(x => x !== 'apiVersion' && x !== 'kind' && x !== 'status');
-    
+
         return copy;
       }
-    
+
       function emitConstruct() {
         code.line('/**');
         code.line(` * ${def.schema.description}`);
         code.line(` *`);
         code.line(` * @schema ${def.fqn}`)
         code.line(` */`);
-        code.openBlock(`export class ${def.kind} extends ApiObject`);
-    
+        code.openBlock(`export class ${def.kind} extends ArmResource`);
+
         emitInitializer();
-      
+
         code.closeBlock();
       }
-    
+
       function emitInitializer() {
-  
+
         code.line(`/**`);
-        code.line(` * Defines a "${def.fqn}" API object`);
+        code.line(` * Defines a "${def.fqn}" Arm Template object`);
         code.line(` * @param scope the scope in which to define this object`);
         code.line(` * @param name a scope-local name for the object`);
         code.line(` * @param options configuration options`);
         code.line(` */`);
-    
+
         const hasRequired = schema.required && Array.isArray(schema.required) && schema.required.length > 0;
         const defaultOptions = hasRequired ? '' : ' = {}';
         code.openBlock(`public constructor(scope: Construct, name: string, options: ${optionsStructName}${defaultOptions})`);
         emitInitializerSuper();
-    
         code.closeBlock();
       }
-    
+
       function emitInitializerSuper() {
-        const groupPrefix = def.group ? `${def.group}/` : '';
         code.open(`super(scope, name, {`);
         code.line(`...options,`);
-        code.line(`kind: '${def.kind}',`);
-        code.line(`apiVersion: '${groupPrefix}${def.version}',`);
-        code.close(`});`);    
+        code.line(`armResourceType: '${def.kind}',`);
+        code.close(`});`);
       }
     });
   }
@@ -94,33 +78,39 @@ export class TypeGenerator {
   public emitType(typeName: string, def: JSONSchema4, structFqn: string): string {
     typeName = normalizeTypeName(typeName);
 
-    if (structFqn.startsWith(DEFINITIONS_PREFIX)) {
-      structFqn = structFqn.substring(DEFINITIONS_PREFIX.length);
-    }
-
-    if (this.isExcluded(structFqn)) {
-      throw new Error(`Type ${structFqn} cannot be added since it matches one of the exclusion patterns`);
-    }
-
-    // skip api objects (they are emitted as constructs and not as data types)
-    if ('x-kubernetes-group-version-kind' in def && def.properties?.metadata) {
-      return typeName;
-    }
-
     if (def.$ref) {
       return this.typeForRef(def);
     }
 
     // unions
     if (def.oneOf || def.anyOf) {
-      this.emitUnion(typeName, def, structFqn)
-      return typeName;
+      const foo = def.oneOf || def.anyOf
+
+      if (foo === undefined) {
+        throw new Error("undefined shouldnt happen here")
+      }
+
+      const reducer = (accumulator: JSONSchema4[], type: JSONSchema4) => {
+        if (type.$ref && type.$ref.match(/expression$/)) {
+        } else {
+          accumulator.push(type)
+        }
+        return accumulator
+      }
+      const cleanTypes = foo.reduce(reducer, [])
+
+      if (cleanTypes.length > 1) {
+        this.emitUnion(typeName, def, structFqn)
+        return typeName;
+      } else {
+        return this.typeForProperty(typeName, cleanTypes[0])
+      }
     }
 
     if (def.type === 'string' && def.format === 'date-time') {
       return `Date`;
     }
-  
+
     switch (def.type) {
       case undefined: return 'string';
       case 'boolean': return 'boolean';
@@ -138,9 +128,29 @@ export class TypeGenerator {
         return 'Date';
       }
 
+      if (def.pattern) {
+        this.emitPattern(`${typeName}Pattern`, def, structFqn)
+        return `${typeName}Pattern`
+      }
+
+      if (def.enum) {
+        let cleantypeName = typeName
+
+        if (typeName.match("#")) {
+          const parts = typeName.split("#") || []
+          cleantypeName = (parts[1] || '').substr('/definitions/'.length);
+        }
+        console.log({cleantypeName})
+        return this.emitEnum(`${cleantypeName }Enum`, def.enum)
+      }
+
       return 'string';
     }
-    
+
+    if (Array.isArray(def.type)) {
+      return 'any';
+    }
+
     if (def.type !== 'object') {
       throw new Error(`unexpected schema type ${def.type}. Expecting "object"`);
     }
@@ -167,7 +177,7 @@ export class TypeGenerator {
       code.line();
       delete this.typesToEmit[name];
       this.emittedTypes.add(name);
-    }    
+    }
   }
 
   private emitLater(typeName: string, codeEmitter: (code: CodeMaker) => void) {
@@ -181,17 +191,46 @@ export class TypeGenerator {
   private emitUnion(typeName: string, def: JSONSchema4, fqn: string) {
     this.emitLater(typeName, code => {
       this.emitDescription(code, fqn, def.description);
-
+      let list = ''
       code.openBlock(`export class ${typeName}`);
-
       for (const option of def.oneOf || def.anyOf || []) {
-        if (typeof(option.type) !== 'string' || !PRIMITIVE_TYPES.includes(option.type)) {
-          throw new Error(`unexpected union type ${JSON.stringify(option.type)}`);
-        }
+        if (!option.enum && option.type === 'array') list = '[]';
+        let type = ''
+        if (option.$ref) {
+          type = this.typeForRef(option);
+        } else if (option.enum) {
+          let cleantypeName = typeName
 
-        const type = option.type === 'integer' ? 'number' : option.type;
+          if (typeName.match("#")) {
+            const parts = typeName.split("#") || []
+            cleantypeName = (parts[1] || '').substr('/definitions/'.length);
+          }
+
+          type = this.emitEnum(`${cleantypeName}Enum`, option.enum)
+        } else if (!option.enum && option.type === 'array') {
+          if (!option.items) type = 'any';
+          const items = option.items as any
+          if (items.$ref) {
+            type = this.typeForRef(items);
+          } else if (items.type) {
+            type = items.type
+          }
+          else {
+            type = 'any'
+          }
+        } else if (option.properties) {
+          this.emitStruct(typeName, option, `${typeName}`)
+        } else if (Array.isArray(option.type) || option.required) {
+          type = 'any'
+        } else {
+          if (option.type) {
+            type = option.type === 'integer' ? 'number' : option.type as string;
+          } else {
+            type = 'any'
+          }
+        }
         const methodName = 'from' + type[0].toUpperCase() + type.substr(1);
-        code.openBlock(`public static ${methodName}(value: ${type}): ${typeName}`);
+        code.openBlock(`public static ${methodName}(value: ${type}${list}): ${typeName}`);
         code.line(`return new ${typeName}(value);`);
         code.closeBlock();
       }
@@ -204,20 +243,52 @@ export class TypeGenerator {
     });
   }
 
+  private emitEnum(typeName: string, values: JSONSchema4Type[]) {
+    this.emitLater(typeName, code => {
+      code.openBlock(`export enum ${typeName}`);
+      values.forEach((v) => {
+        const validName = `${v}`.match(/^([a-zA-Z_])+$/) ? constantCase(`${v}`) : `"${constantCase(`${v}`)}"`
+        console.log({validName})
+        code.line(`${validName} = '${v}',`)
+      })
+      code.closeBlock();
+    });
+
+    return typeName
+  }
+
+  // { type: 'string',
+  // pattern: '^\\[([^\\[].*)?\\]$',
+  // description:
+  //  'Deployment template expression. See https://aka.ms/arm-template-expressions for more details on the ARM expression syntax.' }
+
+  private emitPattern(typeName: string, structDef: JSONSchema4, structFqn: string) {
+    this.emitLater(typeName, code => {
+      this.emitDescription(code, structFqn, structDef.description);
+      code.openBlock(`export class ${typeName}`);
+        code.openBlock(`public static pattern(value: string): string`);
+          code.line(`return value;`);
+        code.closeBlock();
+      code.closeBlock();
+    });
+  }
+
+
   private emitStruct(typeName: string, structDef: JSONSchema4, structFqn: string) {
+    console.log({struct: typeName})
     this.emitLater(typeName, code => {
       this.emitDescription(code, structFqn, structDef.description);
       code.openBlock(`export interface ${typeName}`);
 
       for (const [ propName, propSpec ] of Object.entries(structDef.properties || {})) {
-  
+
         if (propName.startsWith('x-')) {
           continue; // skip extensions for now
         }
-  
+
         this.emitProperty(code, propName, propSpec, structFqn, structDef);
       }
-    
+
       code.closeBlock();
     });
   }
@@ -254,7 +325,7 @@ export class TypeGenerator {
 
       const extractDefault = /Defaults?\W+(to|is)\W+(.+)/g.exec(description);
       const def = extractDefault && extractDefault[2];
-    
+
       code.line(` * ${description}`);
       if (def) {
         annotations['default'] = def;
@@ -278,41 +349,39 @@ export class TypeGenerator {
   }
 
   private typeForRef(def: JSONSchema4): string {
-    const prefix = '#/definitions/';
-    if (!def.$ref || !def.$ref.startsWith(prefix)) {
-      throw new Error(`invalid $ref`);
-    }
-
-    if (this.isExcluded(def.$ref)) {
-      return 'any';
-    }
-
-    const comps = def.$ref.substring(prefix.length).split('.');
-    const typeName = comps[comps.length - 1];
+    if (!def.$ref) return 'any';
+    const parts = def.$ref?.split("#") || []
+    const typeName = (parts[1] || '').substr('/definitions/'.length);
+    console.log({ref: typeName})
     const schema = this.resolveReference(def);
     return this.emitType(typeName, schema, def.$ref);
   }
 
   private typeForArray(propertyFqn: string, def: JSONSchema4): string {
     if (!def.items || typeof(def.items) !== 'object') {
-      throw new Error(`unsupported array type ${def.items}`);
+      return 'any';
+      // throw new Error(`unsupported array type ${def.items}`);
     }
 
     return this.typeForProperty(propertyFqn, def.items);
-  }  
+  }
 
   private resolveReference(def: JSONSchema4): JSONSchema4 {
     const ref = def.$ref;
-    if (!ref || !ref.startsWith(DEFINITIONS_PREFIX)) {
-      throw new Error(`expecting a local reference`);
+    let found = undefined;
+    if (!ref) {
+      throw new Error('no reference found')
     }
+    const parts = ref?.split("#") || []
+    const schema = this.schema.get(parts[0] || '') as JSONSchema4
+    const lookup = (parts[1] || '').substr('/definitions/'.length);
 
-    if (!this.schema.definitions) {
+    if (!schema.definitions) {
       throw new Error(`schema does not have "definitions"`);
     }
 
-    const lookup = ref.substr(DEFINITIONS_PREFIX.length);
-    const found = this.schema.definitions[lookup];
+    found = schema.definitions[lookup];
+
     if (!found) {
       throw new Error(`cannot resolve local reference ${ref}`);
     }
@@ -323,20 +392,7 @@ export class TypeGenerator {
   private isPropertyRequired(property: string, structDef: JSONSchema4) {
     return Array.isArray(structDef.required) && structDef.required.includes(property);
   }
-
-  private isExcluded(fqn: string) {
-    for (const pattern of this.exclude) {
-      const re = new RegExp(pattern);
-      if (re.test(fqn)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
 }
-
-
 
 function normalizeTypeName(typeName: string) {
   if (!typeName.startsWith('I')) { // avoid the regex

@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "armkit generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "typescript": "^3.8.3",
-    "armkit-cli": "file:../../packages/armkit-cli"
+    "@armkit/core": "0.0.0"
+  },
+  "devDependencies": {
+    "armkit-cli": "0.0.0"
   }
 }

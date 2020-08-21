@@ -17,7 +17,7 @@
 				},
 				"properties": {
 					"oneOf": [{
-						"$ref": "#/definitions/Domain_properties"
+						"$ref": "https://schema.management.azure.com/schemas/2015-04-01/Microsoft.DomainRegistration.json#/definitions/Domain_properties"
 					}, {
 						"$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
 					}],
