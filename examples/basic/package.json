@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "armkit generate"
+    "generate": "export SCHEMA_DEFINITION_URL=https://schema.management.azure.com/schemas/2019-06-01/Microsoft.Storage.json armkit generate"
   },
   "keywords": [],
   "author": "",
