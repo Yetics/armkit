@@ -1,7 +1,7 @@
 
 # Armkit (Azure Cloud Development Kit)
 
-![Build Status](TBD)
+[![Build Status](https://dev.azure.com/aheumaier/armkit/_apis/build/status/Yetics.armkit?branchName=master)](https://dev.azure.com/aheumaier/armkit/_build/latest?definitionId=10&branchName=master)
 [![Join the chat at https://gitter.im/Armkit/armkit](https://badges.gitter.im/Armkit/armkit.svg)](https://gitter.im/Armkit/armkit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NPM version](https://badge.fury.io/js/armkit.svg)](https://badge.fury.io/js/armkit)
 
