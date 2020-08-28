@@ -1,7 +1,6 @@
 import { JSONSchema4, JSONSchema4Type } from "json-schema";
 import { CodeMaker, toPascalCase } from "codemaker";
 import { constantCase } from "change-case";
-import $RefParser = require("@apidevtools/json-schema-ref-parser");
 
 export interface TypeGeneratorOptions {
   exclude?: string[];
@@ -14,10 +13,10 @@ export interface GeneratedConstruct {
 }
 
 export class TypeGenerator {
-  private readonly typesToEmit: { [name: string]: (code: CodeMaker) => void } = { };
+  private readonly typesToEmit: { [name: string]: (code: CodeMaker) => void } = {};
   private readonly emittedTypes = new Set<string>();
 
-  constructor(private readonly schema: $RefParser.$Refs) {}
+  constructor(private readonly schema: JSONSchema4) { }
 
   public emitConstruct(def: GeneratedConstruct) {
     this.emitLater(def.kind, code => {
@@ -87,7 +86,7 @@ export class TypeGenerator {
       const foo = def.oneOf || def.anyOf
 
       if (foo === undefined) {
-        throw new Error("undefined shouldnt happen here")
+        throw new Error("undefined shouldn't happen here")
       }
 
       const reducer = (accumulator: JSONSchema4[], type: JSONSchema4) => {
@@ -100,6 +99,7 @@ export class TypeGenerator {
       const cleanTypes = foo.reduce(reducer, [])
 
       if (cleanTypes.length > 1) {
+        console.log({ cleanTypes })
         this.emitUnion(typeName, def, structFqn)
         return typeName;
       } else {
@@ -140,8 +140,8 @@ export class TypeGenerator {
           const parts = typeName.split("#") || []
           cleantypeName = (parts[1] || '').substr('/definitions/'.length);
         }
-        console.log({cleantypeName})
-        return this.emitEnum(`${cleantypeName }Enum`, def.enum)
+        console.log({ cleantypeName })
+        return this.emitEnum(`${cleantypeName}Enum`, def.enum)
       }
 
       return 'string';
@@ -156,7 +156,7 @@ export class TypeGenerator {
     }
 
     // map
-    if (!def.properties && def.additionalProperties && typeof(def.additionalProperties) === 'object') {
+    if (!def.properties && def.additionalProperties && typeof (def.additionalProperties) === 'object') {
       return `{ [key: string]: ${this.typeForProperty(typeName, def.additionalProperties)} }`;
     }
 
@@ -248,7 +248,7 @@ export class TypeGenerator {
       code.openBlock(`export enum ${typeName}`);
       values.forEach((v) => {
         const validName = `${v}`.match(/^([a-zA-Z_])+$/) ? constantCase(`${v}`) : `"${constantCase(`${v}`)}"`
-        console.log({validName})
+        console.log({ validName })
         code.line(`${validName} = '${v}',`)
       })
       code.closeBlock();
@@ -266,21 +266,21 @@ export class TypeGenerator {
     this.emitLater(typeName, code => {
       this.emitDescription(code, structFqn, structDef.description);
       code.openBlock(`export class ${typeName}`);
-        code.openBlock(`public static pattern(value: string): string`);
-          code.line(`return value;`);
-        code.closeBlock();
+      code.openBlock(`public static pattern(value: string): string`);
+      code.line(`return value;`);
+      code.closeBlock();
       code.closeBlock();
     });
   }
 
 
   private emitStruct(typeName: string, structDef: JSONSchema4, structFqn: string) {
-    console.log({struct: typeName})
+    console.log({ struct: typeName })
     this.emitLater(typeName, code => {
       this.emitDescription(code, structFqn, structDef.description);
       code.openBlock(`export interface ${typeName}`);
 
-      for (const [ propName, propSpec ] of Object.entries(structDef.properties || {})) {
+      for (const [propName, propSpec] of Object.entries(structDef.properties || {})) {
 
         if (propName.startsWith('x-')) {
           continue; // skip extensions for now
@@ -317,7 +317,7 @@ export class TypeGenerator {
     code.line();
   }
 
-  private emitDescription(code: CodeMaker, fqn: string, description?: string, annotations: { [type: string]: string } = { }) {
+  private emitDescription(code: CodeMaker, fqn: string, description?: string, annotations: { [type: string]: string } = {}) {
     code.line('/**');
 
     if (description) {
@@ -336,7 +336,7 @@ export class TypeGenerator {
 
     annotations['schema'] = fqn;
 
-    for (const [ type, value ] of Object.entries(annotations)) {
+    for (const [type, value] of Object.entries(annotations)) {
       code.line(` * @${type} ${value}`);
     }
 
@@ -352,13 +352,13 @@ export class TypeGenerator {
     if (!def.$ref) return 'any';
     const parts = def.$ref?.split("#") || []
     const typeName = (parts[1] || '').substr('/definitions/'.length);
-    console.log({ref: typeName})
+    console.log({ ref: typeName })
     const schema = this.resolveReference(def);
     return this.emitType(typeName, schema, def.$ref);
   }
 
   private typeForArray(propertyFqn: string, def: JSONSchema4): string {
-    if (!def.items || typeof(def.items) !== 'object') {
+    if (!def.items || typeof (def.items) !== 'object') {
       return 'any';
       // throw new Error(`unsupported array type ${def.items}`);
     }
