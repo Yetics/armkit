@@ -1,14 +1,14 @@
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import { ImportKubernetesApi } from '../lib/import';
+import { ImportArmSchema } from '../lib/import';
 import { CodeMaker } from 'codemaker';
 import * as $RefParser from "@apidevtools/json-schema-ref-parser";
 
 test('storage_schema.test', async () => {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'storage.test'));
   const spec = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'storage.json'), 'utf-8'));
-  const importer = new ImportKubernetesApi({ apiVersion: 'foo' });
+  const importer = new ImportArmSchema();
   const code = new CodeMaker()
 
   const fileName = `storage.ts`;

@@ -1,54 +1,13 @@
 import { CodeMaker } from 'codemaker';
 import { JSONSchema4 } from 'json-schema';
 import { TypeGenerator } from './type-generator';
-import { ImportBase } from './base';
+import { ImportBase, SchemaConfig } from './base';
 import { httpsGet } from './util';
-import { writeFileSync } from 'fs-extra'
-import * as path from 'path'
-import * as $RefParser from "@apidevtools/json-schema-ref-parser";
 
-export interface ImportArmTemplatesOptions {
-  /**
-   * The API version to generate.
-   */
-  readonly apiVersion: string;
-
-  /**
-   * FQNs of API object types to select instead of selecting the latest stable
-   * version.
-   *
-   * @default - selects the latest stable version from each API object
-   */
-  readonly include?: string[];
-
-  /**
-   * Do not import these types. Instead, represent them as "any".
-   *
-   * @default - include all types that derive from the root types.
-   */
-  readonly exclude?: string[];
-}
-
-export class ImportKubernetesApi extends ImportBase {
-  constructor(private readonly options: ImportArmTemplatesOptions) {
-    super()
-  }
-
-  public get moduleNames() {
-    return ['armkit'];
-  }
-
-  protected async generateTypeScript(code: CodeMaker) {
-    const initialSchema = await downloadSchema(this.options.apiVersion);
-    const resolvedSchema = await $RefParser.resolve(initialSchema)
-
-    for (const path of resolvedSchema.paths()) {
-      const schema = resolvedSchema.get(path)
-      resolvedSchema.set(path, expandRefs(path, schema))
-    }
-
-    writeFileSync(path.join(process.cwd(), 'resolved.json'), JSON.stringify(resolvedSchema.values(), null, 2))
-    this.make(code, resolvedSchema)
+export class ImportArmSchema extends ImportBase {
+  protected async generateTypeScript(code: CodeMaker, config: SchemaConfig) {
+    const schema = await downloadSchema(config.downloadUrl);
+    this.make(code, schema)
   }
 
   public async make(code: CodeMaker, schema: JSONSchema4) {
@@ -58,15 +17,10 @@ export class ImportKubernetesApi extends ImportBase {
     code.line();
 
     const typeGenerator = new TypeGenerator(schema);
+    const topLevelObjects = findApiObjectDefinitions(schema)
 
-    for (const path of schema.paths()) {
-      const s = schema.get(path)
-
-      const topLevelObjects = findApiObjectDefinitions(s)
-
-      for (const o of topLevelObjects) {
-        this.emitConstructForApiObject(typeGenerator, o);
-      }
+    for (const o of topLevelObjects) {
+      this.emitConstructForApiObject(typeGenerator, o);
     }
 
     typeGenerator.generate(code);
@@ -79,33 +33,7 @@ export class ImportKubernetesApi extends ImportBase {
       schema: apidef.schema
     });
   }
-}
-
-function expandRefs(path: string, schema: any): any {
-  const obj: { [key: string]: any } = {}
-
-  for (const key of Object.keys(schema)) {
-    const value = schema[key]
-    let newValue: any
-
-    if (typeof (value) === 'object') {
-      if (Array.isArray(value)) {
-        newValue = value.map((e) => ((typeof (e) === 'object') ? expandRefs(path, e) : e))
-      } else {
-        newValue = expandRefs(path, value)
-      }
-    } else {
-      if (key === "$ref" && value.startsWith('#/definitions/')) {
-        newValue = `${path}${value}`
-      } else {
-        newValue = value
-      }
-    }
-    obj[key] = newValue
-  }
-
-  return obj
-}
+} 
 
 export function findApiObjectDefinitions(schema: JSONSchema4): DeploymentObjectDefinition[] {
   const list: DeploymentObjectDefinition[] = [];
@@ -130,9 +58,8 @@ interface DeploymentObjectDefinition extends DeploymentObjectName {
   schema: JSONSchema4;
 }
 
-async function downloadSchema(schemaVersion: string) {
-  const SCHEMA_URL = process.env.SCHEMA_DEFINITION_URL || `https://schema.management.azure.com/schemas/${schemaVersion}/deploymentTemplate.json`;
-  console.log(SCHEMA_URL)
+async function downloadSchema(url: string) {
+  const SCHEMA_URL = process.env.SCHEMA_DEFINITION_URL || url;  
   const output = await httpsGet(SCHEMA_URL)
   return JSON.parse(output.toString()) as JSONSchema4;
 }

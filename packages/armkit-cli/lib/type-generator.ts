@@ -162,8 +162,11 @@ export class TypeGenerator {
 
     // struct
     if (def.properties) {
-      this.emitStruct(typeName, def, structFqn)
-      return typeName;
+      const parts = typeName.split("#") || []
+      const cleantypeName = constantCase((parts[1] || '').substr('/definitions/'.length));
+
+      this.emitStruct(cleantypeName, def, structFqn)
+      return cleantypeName;
     }
 
     return 'any';
@@ -373,7 +376,7 @@ export class TypeGenerator {
       throw new Error('no reference found')
     }
     const parts = ref?.split("#") || []
-    const schema = this.schema.get(parts[0] || '') as JSONSchema4
+    const schema = this.schema
     const lookup = (parts[1] || '').substr('/definitions/'.length);
 
     if (!schema.definitions) {

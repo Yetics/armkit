@@ -16,9 +16,36 @@ export interface ImportOptions {
   readonly outdir: string;
 }
 
-export abstract class ImportBase {
-  public abstract get moduleNames(): string[];
-  protected abstract async generateTypeScript(code: CodeMaker, moduleName?: string): Promise<void>;
+export interface SchemaConfig {
+  name: string;
+  version: string;
+  downloadUrl: string;
+}
+
+export abstract class ImportBase {  
+  protected abstract async generateTypeScript(code: CodeMaker, config?: SchemaConfig): Promise<void>;
+  public readonly schemaConfig: SchemaConfig[];
+
+  constructor() {
+    this.schemaConfig = this.getSchemaConfig();
+  }
+
+  public getSchemaConfig(): SchemaConfig[] {
+    const baseUrl = "https://schema.management.azure.com/schemas"
+    const config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'schema-config.json')).toString()) as string[]
+
+    return config.map(value => {
+      const [version, fqn] = value.split('/')  
+      const [, name] = fqn.split('.')
+      const url = `${baseUrl}/${version}/${fqn}.json`
+    
+      return {
+        version,
+        name,
+        downloadUrl: url
+      } as SchemaConfig
+    })
+  }
 
   public async import(options: ImportOptions) {
     const code = new CodeMaker();
@@ -27,11 +54,11 @@ export abstract class ImportBase {
     await fs.mkdirp(outdir);
     const isTypescript = options.targetLanguage === Language.TYPESCRIPT
 
-    for (const name of this.moduleNames) {
-      const fileName = `${name}.ts`;
+    for (const config of this.schemaConfig) {
+      const fileName = `${config.name}.ts`;
       code.openFile(fileName);
       code.indentation = 2;
-      await this.generateTypeScript(code, name);
+      await this.generateTypeScript(code, config);
       code.closeFile(fileName);
 
       if (isTypescript) {
