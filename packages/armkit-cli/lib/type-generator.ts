@@ -2,6 +2,7 @@ import { JSONSchema4, JSONSchema4Type } from "json-schema";
 import { CodeMaker, toPascalCase } from "codemaker";
 import { constantCase } from "change-case";
 
+
 export interface TypeGeneratorOptions {
   exclude?: string[];
 }
@@ -162,13 +163,19 @@ export class TypeGenerator {
 
     // struct
     if (def.properties) {
-      const parts = typeName.split("#") || []
-      const cleantypeName = constantCase((parts[1] || '').substr('/definitions/'.length));
-
-      this.emitStruct(cleantypeName, def, structFqn)
-      return cleantypeName;
+      const parts = typeName.split("#") || [];
+      if (parts.length > 1) {
+        const cleantypeName = constantCase(
+          (parts[1] || "").substr("/definitions/".length)
+        );
+        this.emitStruct(cleantypeName, def, structFqn);
+        return cleantypeName;
+      } else {
+        const cleantypeName = constantCase(parts[0]);
+        this.emitStruct(cleantypeName, def, structFqn);
+        return cleantypeName;
+      }
     }
-
     return 'any';
   }
 
