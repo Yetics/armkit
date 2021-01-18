@@ -22,7 +22,7 @@ export class TypeGenerator {
   public emitConstruct(def: GeneratedConstruct) {
     this.emitLater(def.kind, code => {
       const schema = def.schema;
-      const optionsStructName = `${def.kind}Options`;
+      const optionsStructName = `${toPascalCase(def.kind)}Options`;
       const options = createOptionsStructSchema();
       this.emitType(optionsStructName, options, def.fqn)
 
@@ -43,7 +43,7 @@ export class TypeGenerator {
         code.line(` *`);
         code.line(` * @schema ${def.fqn}`)
         code.line(` */`);
-        code.openBlock(`export class ${def.kind} extends ArmResource`);
+        code.openBlock(`export class ${toPascalCase(def.kind)} extends ArmResource`);
 
         emitInitializer();
 
@@ -92,6 +92,7 @@ export class TypeGenerator {
 
       const reducer = (accumulator: JSONSchema4[], type: JSONSchema4) => {
         if (type.$ref && type.$ref.match(/expression$/)) {
+          return accumulator
         } else {
           accumulator.push(type)
         }
@@ -142,7 +143,7 @@ export class TypeGenerator {
           cleantypeName = (parts[1] || '').substr('/definitions/'.length);
         }
         console.log({ cleantypeName })
-        return this.emitEnum(`${cleantypeName}Enum`, def.enum)
+        return this.emitEnum(`${toPascalCase(cleantypeName)}Enum`, def.enum)
       }
 
       return 'string';
@@ -165,13 +166,13 @@ export class TypeGenerator {
     if (def.properties) {
       const parts = typeName.split("#") || [];
       if (parts.length > 1) {
-        const cleantypeName = constantCase(
+        const cleantypeName = toPascalCase(
           (parts[1] || "").substr("/definitions/".length)
         );
         this.emitStruct(cleantypeName, def, structFqn);
         return cleantypeName;
       } else {
-        const cleantypeName = constantCase(parts[0]);
+        const cleantypeName = toPascalCase(parts[0]);
         this.emitStruct(cleantypeName, def, structFqn);
         return cleantypeName;
       }
