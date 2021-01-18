@@ -1,22 +1,38 @@
 import { Construct } from 'constructs';
 import { App, ArmStack } from '@armkit/core';
-import { storageAccounts, MicrosoftStorageStorageAccountsTypeEnum, skuNameEnum, MicrosoftStorageStorageAccountsKindEnum, storageAccountPropertiesCreateParametersAccessTierEnum } from './.generated/armkit'
+import {
+  ContainerGroups, ContainerGroupPropertiesOsTypeEnum, MicrosoftContainerInstanceContainerGroupsTypeEnum, MicrosoftContainerInstanceContainerGroupsApiVersionEnum
+} from './.generated/ContainerInstance'
 
 export class HelloArmkit extends ArmStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    new storageAccounts(this, 'MyStorage', {
-      properties: {
-        accessTier: storageAccountPropertiesCreateParametersAccessTierEnum.HOT
-      },
-      name: 'mystorage452452kda',
-      type: MicrosoftStorageStorageAccountsTypeEnum.MICROSOFT_STORAGE_STORAGE_ACCOUNTS,
-      sku: {
-        name: skuNameEnum.STANDARD_RAGRS
-      },
+    new ContainerGroups(this, 'MyContainerGroup', {
+      name: 'mycontainerGroup',    
       location: 'westeurope',
-      kind: MicrosoftStorageStorageAccountsKindEnum.BLOB_STORAGE
+      type: MicrosoftContainerInstanceContainerGroupsTypeEnum.MICROSOFT_CONTAINER_INSTANCE_CONTAINER_GROUPS,
+      properties: {
+        containers: [{
+          name: 'ubuntu-server',
+          properties: {
+            image: 'ubuntu:18.04',
+            command: ['sleep infinity'],
+            resources: {
+              requests: {
+                cpu: 1,
+                memoryInGB: 2
+              },
+              limits: {
+                cpu: 1,
+                memoryInGB: 4
+              }
+            }
+
+          }
+        }],
+        osType: ContainerGroupPropertiesOsTypeEnum.LINUX,
+      }          
     })
   }
 }
