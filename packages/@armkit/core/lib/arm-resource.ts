@@ -14,6 +14,7 @@ export abstract class ArmResource extends ArmElement {
     super(scope, id)
 
     this.armResourceType = props.armResourceType;
+    delete props.armResourceType
     this._armProperties = props || {};
   }
 
