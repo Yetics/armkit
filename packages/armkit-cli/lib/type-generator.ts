@@ -101,7 +101,7 @@ export class TypeGenerator {
       const cleanTypes = foo.reduce(reducer, [])
 
       if (cleanTypes.length > 1) {
-        console.log({ cleanTypes })
+        // console.log({ cleanTypes })
         this.emitUnion(typeName, def, structFqn)
         return typeName;
       } else {
@@ -131,8 +131,15 @@ export class TypeGenerator {
       }
 
       if (def.pattern) {
-        this.emitPattern(`${typeName}Pattern`, def, structFqn)
-        return `${typeName}Pattern`
+        let cleantypeName = typeName
+
+        if (typeName.match("#")) {
+          const parts = typeName.split("#") || []
+          cleantypeName = (parts[1] || '').substr('/definitions/'.length);
+        }
+        console.log({ cleantypeName })
+        this.emitPattern(`${toPascalCase(cleantypeName)}Pattern`, def, structFqn)
+        return `${toPascalCase(cleantypeName)}Pattern`
       }
 
       if (def.enum) {
@@ -142,7 +149,7 @@ export class TypeGenerator {
           const parts = typeName.split("#") || []
           cleantypeName = (parts[1] || '').substr('/definitions/'.length);
         }
-        console.log({ cleantypeName })
+        // console.log({ cleantypeName })
         return this.emitEnum(`${toPascalCase(cleantypeName)}Enum`, def.enum)
       }
 
@@ -259,7 +266,7 @@ export class TypeGenerator {
       code.openBlock(`export enum ${typeName}`);
       values.forEach((v) => {
         const validName = `${v}`.match(/^([a-zA-Z_])+$/) ? constantCase(`${v}`) : `"${constantCase(`${v}`)}"`
-        console.log({ validName })
+        // console.log({ validName })
         code.line(`${validName} = '${v}',`)
       })
       code.closeBlock();
@@ -286,7 +293,7 @@ export class TypeGenerator {
 
 
   private emitStruct(typeName: string, structDef: JSONSchema4, structFqn: string) {
-    console.log({ struct: typeName })
+    // console.log({ struct: typeName })
     this.emitLater(typeName, code => {
       this.emitDescription(code, structFqn, structDef.description);
       code.openBlock(`export interface ${typeName}`);
@@ -363,7 +370,7 @@ export class TypeGenerator {
     if (!def.$ref) return 'any';
     const parts = def.$ref?.split("#") || []
     const typeName = (parts[1] || '').substr('/definitions/'.length);
-    console.log({ ref: typeName })
+    // console.log({ ref: typeName })
     const schema = this.resolveReference(def);
     return this.emitType(typeName, schema, def.$ref);
   }
