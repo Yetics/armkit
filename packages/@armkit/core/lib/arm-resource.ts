@@ -21,6 +21,6 @@ export abstract class ArmResource extends ArmElement {
   // protected abstract synthesizeAttributes(): { [name: string]: any };
 
   public toArm(): any {
-    return Object.assign({}, this._armProperties, {apiVersion: '2017-06-01'})
+    return Object.assign({}, this._armProperties)
   }
 }
