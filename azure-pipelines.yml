@@ -26,7 +26,7 @@ jobs:
       displayName: 'Yarn install'
 
   
-      # yarn test run fpr amkit-cli
+      # yarn test run for amkit-cli
     - bash: |
         yarn test
       displayName: 'Run yarn test'
