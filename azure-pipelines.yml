@@ -26,13 +26,13 @@ jobs:
 
     # yarn build packages/@armkit/core
     - bash: |
-        yarn install
+        yarn build
       workingDirectory: packages/@armkit/core
       displayName: 'Yarn build @armkit/core'  
 
     # yarn build armkit-cli
     - bash: |
-        yarn install
+        yarn build
       workingDirectory: packages/armkit-cli
       displayName: 'Yarn build armkit-cli'      
   
