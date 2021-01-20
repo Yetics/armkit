@@ -137,7 +137,7 @@ export class TypeGenerator {
           const parts = typeName.split("#") || []
           cleantypeName = (parts[1] || '').substr('/definitions/'.length);
         }
-        console.log({ cleantypeName })
+        // console.log({ cleantypeName })
         this.emitPattern(`${toPascalCase(cleantypeName)}Pattern`, def, structFqn)
         return `${toPascalCase(cleantypeName)}Pattern`
       }
