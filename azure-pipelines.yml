@@ -19,24 +19,33 @@ jobs:
         versionSpec: '13.x'
         checkLatest: true
 
-    # yarn install
+    # yarn install, build packages
     - bash: |
         yarn install
-        yarn build
       displayName: 'Yarn install'
-      failOnStderr: true
-  
-      # yarn lint run
-    - bash: |
-        yarn lint
-      displayName: 'Run yarn lint'
-      workingDirectory: examples/basic 
-      displayName: 'Yarn lint'
-      failOnStderr: true
 
-      # yarn test run
+    # yarn build packages/@armkit/core
+    - bash: |
+        yarn build
+      workingDirectory: packages/@armkit/core
+      displayName: 'Yarn build @armkit/core'  
+
+    # yarn build armkit-cli
+    - bash: |
+        yarn build
+      workingDirectory: packages/armkit-cli
+      displayName: 'Yarn build armkit-cli'      
+  
+      # yarn test run for amkit-cli
     - bash: |
         yarn test
+      displayName: 'Run yarn test'
+      workingDirectory: packages/armkit-cli
+
+      # yarn build examples
+    - bash: |
+        yarn generate
+        yarn build
+        node index.js
       workingDirectory: examples/basic 
-      displayName: 'Yarn test'
-      failOnStderr: true      
+      displayName: 'Yarn build examples'   
