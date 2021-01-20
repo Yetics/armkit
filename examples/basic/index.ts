@@ -3,14 +3,18 @@ import { App, ArmStack } from '@armkit/core';
 import {
   ContainerGroups, ContainerGroupPropertiesOsTypeEnum, MicrosoftContainerInstanceContainerGroupsTypeEnum, MicrosoftContainerInstanceContainerGroupsApiVersionEnum
 } from './.generated/ContainerInstance'
+import {
+  Registries, MicrosoftContainerRegistryRegistriesApiVersionEnum, MicrosoftContainerRegistryRegistriesTypeEnum, SkuNameEnum
+} from './.generated/ContainerRegistry'
 
 export class HelloArmkit extends ArmStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
     new ContainerGroups(this, 'MyContainerGroup', {
-      name: 'mycontainerGroup',    
+      name: 'azurecdktest',
       location: 'westeurope',
+      apiVersion: MicrosoftContainerInstanceContainerGroupsApiVersionEnum['2019_12_01'],
       type: MicrosoftContainerInstanceContainerGroupsTypeEnum.MICROSOFT_CONTAINER_INSTANCE_CONTAINER_GROUPS,
       properties: {
         containers: [{
@@ -25,14 +29,27 @@ export class HelloArmkit extends ArmStack {
               },
               limits: {
                 cpu: 1,
-                memoryInGB: 4
+                memoryInGB: 2
               }
             }
 
           }
         }],
         osType: ContainerGroupPropertiesOsTypeEnum.LINUX,
-      }          
+      }
+    })
+
+    new Registries(this, 'azurecdktest', {
+      name: 'azurecdktest',
+      location: 'westeurope',
+      apiVersion: MicrosoftContainerRegistryRegistriesApiVersionEnum['2019_05_01'],
+      type: MicrosoftContainerRegistryRegistriesTypeEnum.MICROSOFT_CONTAINER_REGISTRY_REGISTRIES,
+      sku: {
+        name: SkuNameEnum.BASIC
+      },
+      properties: {
+        adminUserEnabled: false
+      }
     })
   }
 }

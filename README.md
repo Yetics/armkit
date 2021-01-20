@@ -40,6 +40,7 @@ The CDK for Azure includes two packages:
 We generated some sample constructs in [examples](./examples/README.md). This   could look like this:
 
 #### **`helloArmkit.ts`**
+
 ```ts 
 import { Construct } from 'constructs';
 import { App, ArmStack } from '@armkit/core';
@@ -89,15 +90,6 @@ app.synth();
 You could deploy them with `az deployment group create --resource-group rg-my-resourcegroup --template-file cdk.out/helloarmkit.json`
 
 For a detailed walkthrough, see the Armkit [Developer Guide](./CONTRIBUTING.md).
-
-## Getting Help
-
-The best way to interact with us is through GitHub.  We use the GitHub issues
-for tracking bugs and feature requests.
-
-* If it turns out that you may have found a bug,
-  please open an [issue](https://github.com/Armkit/armkit/issues/new)
-
 
 ## Contributing and Feedback
 
