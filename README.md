@@ -19,10 +19,6 @@ Armkit is available in the following languages:
 
 -------
 
-[Examples](https://github.com/Armkit/armkit/examples) |
-[Getting Help](#getting-help) |
-[Roadmap](https://github.com/Armkit/armkit/blob/master/ROADMAP.md)
-
 Developers use the [Armkit framework] in one of the supported programming languages to define reusable cloud components called [constructs], which are composed together into [stacks], forming an "Armkit app".
 
 They then use the [Armkit CLI](#) to interact with their Armkit app. The CLI allows developers to synthesize artifacts such as Azure ARM Templates, deploy stacks to development Azure accounts and "diff"
@@ -86,8 +82,6 @@ const app = new App({ outdir: 'cdk.out' });
 new HelloArmkit(app, 'hello-armkit');
 app.synth();
 ```
-
-You could deploy them with `az deployment group create --resource-group rg-my-resourcegroup --template-file cdk.out/helloarmkit.json`
 
 For a detailed walkthrough, see the Armkit [Developer Guide](./CONTRIBUTING.md).
 
