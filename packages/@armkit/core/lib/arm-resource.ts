@@ -14,12 +14,13 @@ export abstract class ArmResource extends ArmElement {
     super(scope, id)
 
     this.armResourceType = props.armResourceType;
+    delete props.armResourceType
     this._armProperties = props || {};
   }
 
   // protected abstract synthesizeAttributes(): { [name: string]: any };
 
   public toArm(): any {
-    return Object.assign({}, this._armProperties, {apiVersion: '2017-06-01'})
+    return Object.assign({}, this._armProperties)
   }
 }

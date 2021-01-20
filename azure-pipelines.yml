@@ -7,7 +7,7 @@ trigger:
 - development
 
 jobs:
-- job: armkit_generate
+- job: armkit
   timeoutInMinutes: 10
   pool:
     vmImage: 'ubuntu-18.04'
@@ -16,13 +16,27 @@ jobs:
     # Finds or downloads and caches the specified version spec of Node.js and adds it to the PATH
     - task: NodeTool@0
       inputs:
-        versionSpec: '13.x' 
+        versionSpec: '13.x'
         checkLatest: true
-    # armkit generate run      
+
+    # yarn install
     - bash: |
-        set -x
         yarn install
         yarn build
-        cd examples/basic && yarn generate
-      displayName: 'Run armkit generate' 
+      displayName: 'Yarn install'
+      failOnStderr: true
+  
+      # yarn lint run
+    - bash: |
+        yarn lint
+      displayName: 'Run yarn lint'
+      workingDirectory: examples/basic 
+      displayName: 'Yarn lint'
+      failOnStderr: true
 
+      # yarn test run
+    - bash: |
+        yarn test
+      workingDirectory: examples/basic 
+      displayName: 'Yarn test'
+      failOnStderr: true      

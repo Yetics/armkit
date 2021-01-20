@@ -1,5 +1,5 @@
 import * as yargs from 'yargs';
-import { ImportKubernetesApi } from '../../lib/import';
+import { ImportArmSchema } from '../../lib/import';
 import { Language } from '../../lib/base';
 
 class Command implements yargs.CommandModule {
@@ -12,9 +12,7 @@ class Command implements yargs.CommandModule {
     .option('input', { type: 'string' as 'string', desc: 'schema input file', alias: 'i' });
 
   public async handler(argv: any) {
-    const importer = new ImportKubernetesApi({
-      apiVersion: "2019-04-01"}
-    )
+    const importer = new ImportArmSchema()
     importer.import({outdir: argv.output, targetLanguage: Language.TYPESCRIPT})
   }
 }

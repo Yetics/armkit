@@ -1,0 +1,6 @@
+[
+  "2019-12-01/Microsoft.ContainerInstance",
+  "2019-05-01/Microsoft.ContainerRegistry",
+  "2020-09-01/Microsoft.ContainerService",
+  "2019-06-01/Microsoft.Storage"
+]

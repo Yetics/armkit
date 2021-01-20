@@ -9,7 +9,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "lint": "eslint . --ext .ts",
-    "test": "jest && yarn lint",
+    "test": "jest",
     "package": "./package.sh"
   },
   "keywords": [
@@ -19,12 +19,6 @@
     "azure"
   ],
   "license": "Apache-2.0",
-  "jest": {
-    "collectCoverage": true,
-    "moduleFileExtensions": [
-      "js"
-    ]
-  },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
     "plugins": [
@@ -58,6 +52,7 @@
     "async-parallel": "^1.2.3",
     "change-case": "^4.1.1",
     "codemaker": "^1.0.0",
+    "eslint": "^7.7.0",
     "fs": "^0.0.1-security",
     "fs-extra": "^8.1.0",
     "json-schema": "^0.2.5",
@@ -67,9 +62,11 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^8.1.0",
-    "@types/jest": "^25.1.4",
+    "@types/jest": "^26.0.0",
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
-    "jest": "^25.1.0"
+    "jest": "^26.0.0",
+    "ts-jest": "^26.3.0",
+    "ts-jest": "^26.4.4"
   }
 }

@@ -8,7 +8,8 @@
     "build": "lerna run build",
     "test": "lerna run test",
     "package": "lerna run package",
-    "release": "tools/release.sh"
+    "release": "tools/release.sh",
+    "lint": "eslint packages/armkit-cli"
   },
   "author": {
     "name": "Armkit",

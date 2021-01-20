@@ -7,17 +7,46 @@
   "functions": [],
   "resources": [
     {
+      "name": "azurecdktest",
+      "location": "westeurope",
+      "apiVersion": "2019-12-01",
+      "type": "Microsoft.ContainerInstance/containerGroups",
       "properties": {
-        "accessTier": "Hot"
-      },
-      "name": "mystorage452452kda",
-      "type": "Microsoft.Storage/storageAccounts",
+        "containers": [
+          {
+            "name": "ubuntu-server",
+            "properties": {
+              "image": "ubuntu:18.04",
+              "command": [
+                "sleep infinity"
+              ],
+              "resources": {
+                "requests": {
+                  "cpu": 1,
+                  "memoryInGB": 2
+                },
+                "limits": {
+                  "cpu": 1,
+                  "memoryInGB": 2
+                }
+              }
+            }
+          }
+        ],
+        "osType": "Linux"
+      }
+    },
+    {
+      "name": "azurecdktest",
+      "location": "westeurope",
+      "apiVersion": "2019-05-01",
+      "type": "Microsoft.ContainerRegistry/registries",
       "sku": {
-        "name": "Standard_RAGRS"
+        "name": "Basic"
       },
-      "location": "foo",
-      "kind": "BlobStorage",
-      "apiVersion": "2017-06-01"
+      "properties": {
+        "adminUserEnabled": false
+      }
     }
   ],
   "outputs": {}

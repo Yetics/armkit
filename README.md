@@ -19,80 +19,104 @@ Armkit is available in the following languages:
 
 -------
 
-[Examples](https://github.com/Armkit/armkit/examples) |
-[Getting Help](#getting-help) |
-[Roadmap](https://github.com/Armkit/armkit/blob/master/ROADMAP.md)
+Developers use the [Armkit framework] in one of the supported programming languages to define reusable cloud components called [constructs], which are composed together into [stacks], forming an "Armkit app".
 
-Developers use the [Armkit framework] in one of the
-supported programming languages to define reusable cloud components called [constructs], which
-are composed together into [stacks], forming a "Armkit app".
-
-They then use the [Armkit CLI] to interact with their Armkit app. The CLI allows developers to
-synthesize artifacts such as Azure ARM Templates, deploy stacks to development Azure accounts and "diff"
+They then use the [Armkit CLI](#) to interact with their Armkit app. The CLI allows developers to synthesize artifacts such as Azure ARM Templates, deploy stacks to development Azure accounts and "diff"
 against a deployed stack to understand the impact of a code change.
 
-The [Armkit Construct Library] includes a module for each
-Azure service with constructs that offer rich APIs that encapsulate the details of
-how to use Azure. The Armkit Construct Library aims to reduce the complexity and
-glue-logic required when integrating various Azure services to achieve your goals
-on Azure.
+The [Armkit Construct Library](#) includes a module for each Azure service with constructs that offer rich APIs that encapsulate the details of how to use Azure. The Armkit Construct Library aims to reduce the complexity and glue-logic required when integrating various Azure services to achieve your goals on Azure.
 
-## At a glance
+The CDK for Azure includes two packages:
 
-Install or update the [Armkit CLI] from npm (requires [Node.js ≥ 10.3.0](https://nodejs.org/download/release/latest-v10.x/)):
+* [@armkit/core](https://github.com/Yetics/armkit/tree/development/packages/%40armkit/core) - A library for defining Azure resources using programming constructs.
+* [armkit-cli](https://github.com/Yetics/armkit/tree/development/packages/armkit-cli) - A CLI that allows users to run commands to initialize, import, and synthesize CDK for Azure applications.
 
-```bash
-$ npm i -g armkit
-```
 
-Initialize a project:
+## Examples
 
-```bash
-$ mkdir hello-armkit
-$ cd hello-armkit
-$ armkit init sample-app --language=typescript
-```
+We generated some sample constructs in [examples](./examples/README.md). This   could look like this:
 
-This creates a sample project looking like this:
+#### **`helloArmkit.ts`**
 
-```ts
-export class HelloArmkitDeployment extends Armkit.Deployment {
-  constructor(scope: Armkit.App, id: string, props?: Armkit.DeploymentProps) {
-    super(scope, id, props);
+```ts 
+import { Construct } from 'constructs';
+import { App, ArmStack } from '@armkit/core';
+import {
+  ContainerGroups, ContainerGroupPropertiesOsTypeEnum, MicrosoftContainerInstanceContainerGroupsTypeEnum, MicrosoftContainerInstanceContainerGroupsApiVersionEnum
+} from './.generated/ContainerInstance'
+
+export class HelloArmkit extends ArmStack {
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+
+    new ContainerGroups(this, 'MyContainerGroup', {
+      name: 'azurecdktest',
+      location: 'westeurope',
+      apiVersion: MicrosoftContainerInstanceContainerGroupsApiVersionEnum['2019_12_01'],
+      type: MicrosoftContainerInstanceContainerGroupsTypeEnum.MICROSOFT_CONTAINER_INSTANCE_CONTAINER_GROUPS,
+      properties: {
+        containers: [{
+          name: 'ubuntu-server',
+          properties: {
+            image: 'ubuntu:18.04',
+            command: ['sleep infinity'],
+            resources: {
+              requests: {
+                cpu: 1,
+                memoryInGB: 2
+              },
+              limits: {
+                cpu: 1,
+                memoryInGB: 2
+              }
+            }
+
+          }
+        }],
+        osType: ContainerGroupPropertiesOsTypeEnum.LINUX,
+      }
+    })
   }
 }
+
+const app = new App({ outdir: 'cdk.out' });
+new HelloArmkit(app, 'hello-armkit');
+app.synth();
 ```
 
-Deploy this to your account:
+For a detailed walkthrough, see the Armkit [Developer Guide](./CONTRIBUTING.md).
+
+## Contributing and Feedback
+
+CDK for Azure is an early experimental project and the development folks would love your feedback to help guide the project.
+
+* Report a [bug](https://github.com/yetics/armkit/issues/new?assignees=&labels=bug&template=bug-report.md&title=) or request a new [feature](https://github.com/yetics/armkit/issues/new?assignees=&labels=enhancement&template=feature-request.md&title=).
+* Browse all [open issues](https://github.com/yetics/armkit/issues).
+* Public [roadmap](https://github.com/yetics/armkit/projects/1).
+* Ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/armkit) and tag it with `armkit`
+* Come join the Armkit community on [Gitter](https://gitter.im/Armkit/armkit)
+
+We welcome community contributions and pull requests. See [CONTRIBUTING](./CONTRIBUTING.md) for information on how to set up a development environment and submit code.
+
+## Building
+
+Clone the project repository
 
 ```bash
-$ armkit deploy
+git clone https://github.com/Yetics/armkit.git
 ```
 
-Use the `armkit` command-line toolkit to interact with your project:
+Download dependencies
 
- * `armkit deploy`: deploys your app into an Azure account
- * `armkit synth`: synthesizes an Azure ARM template for your app
- * `armkit diff`: compares your app with the deployed stack
+```bash
+cd armkit/
+yarn install
+```
 
-For a detailed walkthrough, see the [tutorial] in the Armkit [Developer Guide].
+Build the project and packages
 
-## Getting Help
-
-Please use these community resources for getting help. We use the GitHub issues
-for tracking bugs and feature requests.
-
-* Ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/armkit)
-  and tag it with `armkit`
-* Come join the Armkit community on [Gitter](https://gitter.im/Armkit/armkit)
-* If it turns out that you may have found a bug,
-  please open an [issue](https://github.com/Armkit/armkit/issues/new)
-
-## Contributing
-
-We welcome community contributions and pull requests. See
-[CONTRIBUTING](./CONTRIBUTING.md) for information on how to set up a development
-environment and submit code.
+```bash
+yarn build
 
 ## Roadmap
 
