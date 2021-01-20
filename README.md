@@ -28,8 +28,9 @@ The [Armkit Construct Library](#) includes a module for each Azure service with 
 
 The CDK for Azure includes two packages:
 
-* armkit-cli - A CLI that allows users to run commands to initialize, import, and synthesize CDK for Azure applications.
-* @armkit - A library for defining Azure resources using programming constructs.
+* [@armkit/core](https://github.com/Yetics/armkit/tree/development/packages/%40armkit/core) - A library for defining Azure resources using programming constructs.
+* [armkit-cli](https://github.com/Yetics/armkit/tree/development/packages/armkit-cli) - A CLI that allows users to run commands to initialize, import, and synthesize CDK for Azure applications.
+
 
 ## Examples
 
