@@ -42,10 +42,10 @@ jobs:
       displayName: 'Run yarn test'
       workingDirectory: packages/armkit-cli
 
-      # yarn build examples
-    - bash: |
-        yarn generate
-        yarn build
-        node index.js
-      workingDirectory: examples/basic 
-      displayName: 'Yarn build examples'   
+    #   # yarn build examples
+    # - bash: |
+    #     yarn generate
+    #     yarn build
+    #     node index.js
+    #   workingDirectory: examples/basic 
+    #   displayName: 'Yarn build examples'   
