@@ -49,3 +49,9 @@ resulting in a `.generated` folder containing the typscript libraries
     ```shell
     ~/armkit$ az deployment group create --resource-group rg-your-resourcegroup --template-file cdk.out/helloarmkit.json
     ```
+
+## Running tests
+
+```shell
+ ~/armkit/packages/armkit-cli$ yarn test
+```
