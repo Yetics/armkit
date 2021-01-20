@@ -22,9 +22,19 @@ jobs:
     # yarn install, build packages
     - bash: |
         yarn install
-        yarn build
       displayName: 'Yarn install'
 
+    # yarn build packages/@armkit/core
+    - bash: |
+        yarn install
+      workingDirectory: packages/@armkit/core
+      displayName: 'Yarn build @armkit/core'  
+
+    # yarn build armkit-cli
+    - bash: |
+        yarn install
+      workingDirectory: packages/armkit-cli
+      displayName: 'Yarn build armkit-cli'      
   
       # yarn test run for amkit-cli
     - bash: |
