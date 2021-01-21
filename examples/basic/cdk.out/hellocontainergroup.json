@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "0.1.0.0",
+  "apiProfile": "2018-06-01-profile",
+  "parameters": {},
+  "variables": {},
+  "functions": [],
+  "resources": [
+    {
+      "name": "azurecdktest",
+      "location": "westeurope",
+      "apiVersion": "2019-05-01",
+      "type": "Microsoft.ContainerRegistry/registries",
+      "sku": {
+        "name": "Basic"
+      },
+      "properties": {
+        "adminUserEnabled": false
+      }
+    }
+  ],
+  "outputs": {}
+}
