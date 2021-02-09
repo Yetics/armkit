@@ -10,6 +10,7 @@ export class HelloContainerGroup extends ArmStack {
 
         new ContainerGroups(this, 'MyContainerGroup', {
             name: 'azurecdktest',
+
             location: 'westeurope',
             apiVersion: MicrosoftContainerInstanceContainerGroupsApiVersionEnum['2019_12_01'],
             type: MicrosoftContainerInstanceContainerGroupsTypeEnum.MICROSOFT_CONTAINER_INSTANCE_CONTAINER_GROUPS,
@@ -22,11 +23,11 @@ export class HelloContainerGroup extends ArmStack {
                         resources: {
                             requests: {
                                 cpu: 1,
-                                memoryInGb: 2
+                                memoryInGB: 2
                             },
                             limits: {
                                 cpu: 1,
-                                memoryInGb: 2
+                                memoryInGB: 2
                             }
                         }
 
