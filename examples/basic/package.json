@@ -1,11 +1,14 @@
 {
-  "name": "basic",
+  "name": "@examples/basic",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "SCHEMA_DEFINITION_URL=https://schema.management.azure.com/schemas/2018-06-01/Microsoft.DataFactory.json armkit generate"
+    "generate": "armkit generate"
   },
   "keywords": [],
   "author": "",

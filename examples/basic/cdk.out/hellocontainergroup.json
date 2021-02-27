@@ -7,17 +7,16 @@
   "functions": [],
   "resources": [
     {
-      "properties": {
-        "accessTier": "Hot"
-      },
-      "name": "mystorage452452kda",
-      "type": "Microsoft.Storage/storageAccounts",
+      "name": "azurecdktest",
+      "location": "westeurope",
+      "apiVersion": "2019-05-01",
+      "type": "Microsoft.ContainerRegistry/registries",
       "sku": {
-        "name": "Standard_RAGRS"
+        "name": "Basic"
       },
-      "location": "foo",
-      "kind": "BlobStorage",
-      "apiVersion": "2017-06-01"
+      "properties": {
+        "adminUserEnabled": false
+      }
     }
   ],
   "outputs": {}

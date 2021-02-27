@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "0.1.0.0",
+  "apiProfile": "2018-06-01-profile",
+  "parameters": {},
+  "variables": {},
+  "functions": [],
+  "resources": [
+    {
+      "name": "AzureCDKVnet",
+      "location": "westeurope",
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2020-05-01",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "MySubnet11",
+            "properties": {
+              "addressPrefix": "10.0.0.1/24"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {}
+}

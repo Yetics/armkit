@@ -2,6 +2,7 @@ import { JSONSchema4, JSONSchema4Type } from "json-schema";
 import { CodeMaker, toPascalCase } from "codemaker";
 import { constantCase } from "change-case";
 
+
 export interface TypeGeneratorOptions {
   exclude?: string[];
 }
@@ -21,7 +22,7 @@ export class TypeGenerator {
   public emitConstruct(def: GeneratedConstruct) {
     this.emitLater(def.kind, code => {
       const schema = def.schema;
-      const optionsStructName = `${def.kind}Options`;
+      const optionsStructName = `${toPascalCase(def.kind)}Options`;
       const options = createOptionsStructSchema();
       this.emitType(optionsStructName, options, def.fqn)
 
@@ -42,7 +43,7 @@ export class TypeGenerator {
         code.line(` *`);
         code.line(` * @schema ${def.fqn}`)
         code.line(` */`);
-        code.openBlock(`export class ${def.kind} extends ArmResource`);
+        code.openBlock(`export class ${toPascalCase(def.kind)} extends ArmResource`);
 
         emitInitializer();
 
@@ -75,15 +76,14 @@ export class TypeGenerator {
   }
 
   public emitType(typeName: string, def: JSONSchema4, structFqn: string): string {
-    typeName = normalizeTypeName(typeName);
 
     if (def.$ref) {
       return this.typeForRef(def);
     }
 
     // unions
-    if (def.oneOf || def.anyOf) {
-      const foo = def.oneOf || def.anyOf
+    if (def.oneOf || def.anyOf || def.allOf) {
+      const foo = def.oneOf || def.anyOf || def.allOf
 
       if (foo === undefined) {
         throw new Error("undefined shouldn't happen here")
@@ -91,6 +91,7 @@ export class TypeGenerator {
 
       const reducer = (accumulator: JSONSchema4[], type: JSONSchema4) => {
         if (type.$ref && type.$ref.match(/expression$/)) {
+          return accumulator
         } else {
           accumulator.push(type)
         }
@@ -99,11 +100,12 @@ export class TypeGenerator {
       const cleanTypes = foo.reduce(reducer, [])
 
       if (cleanTypes.length > 1) {
-        console.log({ cleanTypes })
         this.emitUnion(typeName, def, structFqn)
         return typeName;
+
       } else {
         return this.typeForProperty(typeName, cleanTypes[0])
+
       }
     }
 
@@ -129,19 +131,12 @@ export class TypeGenerator {
       }
 
       if (def.pattern) {
-        this.emitPattern(`${typeName}Pattern`, def, structFqn)
-        return `${typeName}Pattern`
+        this.emitPattern(`${toPascalCase(sanitizeType(typeName))}Pattern`, def, structFqn)
+        return `${toPascalCase(sanitizeType(typeName))}Pattern`
       }
 
       if (def.enum) {
-        let cleantypeName = typeName
-
-        if (typeName.match("#")) {
-          const parts = typeName.split("#") || []
-          cleantypeName = (parts[1] || '').substr('/definitions/'.length);
-        }
-        console.log({ cleantypeName })
-        return this.emitEnum(`${cleantypeName}Enum`, def.enum)
+        return this.emitEnum(`${toPascalCase(sanitizeType(typeName))}Enum`, def.enum)
       }
 
       return 'string';
@@ -162,13 +157,19 @@ export class TypeGenerator {
 
     // struct
     if (def.properties) {
-      const parts = typeName.split("#") || []
-      const cleantypeName = constantCase((parts[1] || '').substr('/definitions/'.length));
-
-      this.emitStruct(cleantypeName, def, structFqn)
-      return cleantypeName;
+      const parts = typeName.split("#") || [];
+      if (parts.length > 1) {
+        const cleantypeName = toPascalCase(
+          (parts[1] || "").substr("/definitions/".length)
+        );
+        this.emitStruct(cleantypeName, def, structFqn);
+        return cleantypeName;
+      } else {
+        const cleantypeName = toPascalCase(parts[0]);
+        this.emitStruct(cleantypeName, def, structFqn);
+        return cleantypeName;
+      }
     }
-
     return 'any';
   }
 
@@ -195,44 +196,62 @@ export class TypeGenerator {
     this.emitLater(typeName, code => {
       this.emitDescription(code, fqn, def.description);
       let list = ''
+
       code.openBlock(`export class ${typeName}`);
-      for (const option of def.oneOf || def.anyOf || []) {
+      for (const option of def.oneOf || def.anyOf || def.allOf || []) {
         if (!option.enum && option.type === 'array') list = '[]';
         let type = ''
+
         if (option.$ref) {
+
           type = this.typeForRef(option);
+
         } else if (option.enum) {
-          let cleantypeName = typeName
+          type = this.emitEnum(`${sanitizeType(typeName)}Enum`, option.enum)
 
-          if (typeName.match("#")) {
-            const parts = typeName.split("#") || []
-            cleantypeName = (parts[1] || '').substr('/definitions/'.length);
-          }
-
-          type = this.emitEnum(`${cleantypeName}Enum`, option.enum)
         } else if (!option.enum && option.type === 'array') {
+
           if (!option.items) type = 'any';
           const items = option.items as any
           if (items.$ref) {
             type = this.typeForRef(items);
           } else if (items.type) {
             type = items.type
-          }
-          else {
+          } else {
             type = 'any'
           }
+
         } else if (option.properties) {
           this.emitStruct(typeName, option, `${typeName}`)
+
+          if (option.allOf) {
+            this.emitStruct(typeName, option, `${typeName}`)
+          }
+
         } else if (Array.isArray(option.type) || option.required) {
           type = 'any'
         } else {
+
           if (option.type) {
             type = option.type === 'integer' ? 'number' : option.type as string;
           } else {
             type = 'any'
           }
         }
-        const methodName = 'from' + type[0].toUpperCase() + type.substr(1);
+
+        // Poor mens helper to swim 
+        let typeArr = []
+        if (typeof type == "string") {
+          typeArr = type.split(" ")
+        } else {
+          typeArr = type
+        }
+
+        console.log(typeArr)
+        console.log("emitUnion: Using methodName")
+        console.log(" ")
+
+        const methodName = 'from' + toPascalCase(typeArr[0]) + type.substr(1);
         code.openBlock(`public static ${methodName}(value: ${type}${list}): ${typeName}`);
         code.line(`return new ${typeName}(value);`);
         code.closeBlock();
@@ -251,7 +270,7 @@ export class TypeGenerator {
       code.openBlock(`export enum ${typeName}`);
       values.forEach((v) => {
         const validName = `${v}`.match(/^([a-zA-Z_])+$/) ? constantCase(`${v}`) : `"${constantCase(`${v}`)}"`
-        console.log({ validName })
+
         code.line(`${validName} = '${v}',`)
       })
       code.closeBlock();
@@ -259,11 +278,6 @@ export class TypeGenerator {
 
     return typeName
   }
-
-  // { type: 'string',
-  // pattern: '^\\[([^\\[].*)?\\]$',
-  // description:
-  //  'Deployment template expression. See https://aka.ms/arm-template-expressions for more details on the ARM expression syntax.' }
 
   private emitPattern(typeName: string, structDef: JSONSchema4, structFqn: string) {
     this.emitLater(typeName, code => {
@@ -278,7 +292,6 @@ export class TypeGenerator {
 
 
   private emitStruct(typeName: string, structDef: JSONSchema4, structFqn: string) {
-    console.log({ struct: typeName })
     this.emitLater(typeName, code => {
       this.emitDescription(code, structFqn, structDef.description);
       code.openBlock(`export interface ${typeName}`);
@@ -355,7 +368,6 @@ export class TypeGenerator {
     if (!def.$ref) return 'any';
     const parts = def.$ref?.split("#") || []
     const typeName = (parts[1] || '').substr('/definitions/'.length);
-    console.log({ ref: typeName })
     const schema = this.resolveReference(def);
     return this.emitType(typeName, schema, def.$ref);
   }
@@ -397,20 +409,12 @@ export class TypeGenerator {
   }
 }
 
-function normalizeTypeName(typeName: string) {
-  if (!typeName.startsWith('I')) { // avoid the regex
-    return typeName;
-  }
+function sanitizeType(typeName: string) {
+  let cleantypeName = typeName;
 
-  // if the type name starts with IXXXFoo then make XXX lowercase because we assume
-  // it's an acromym that starts with an I, and this will be identified as an interface by JSII.
-  const re = /^I([A-Z]+)([A-Z][a-z]+[A-Za-z]+)$/.exec(typeName);
-  if (!re) {
-    return typeName;
+  if (typeName.match("#")) {
+    const parts = typeName.split("#") || [];
+    cleantypeName = (parts[1] || '').substr('/definitions/'.length);
   }
-
-  const group1 = re[1];
-  const rest = re[2];
-  const normalized = `I${group1.toLocaleLowerCase()}${rest}`;
-  return normalized;
+  return cleantypeName;
 }

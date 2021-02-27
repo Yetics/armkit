@@ -33,7 +33,7 @@ export class ImportArmSchema extends ImportBase {
       schema: apidef.schema
     });
   }
-} 
+}
 
 export function findApiObjectDefinitions(schema: JSONSchema4): DeploymentObjectDefinition[] {
   const list: DeploymentObjectDefinition[] = [];
@@ -59,7 +59,7 @@ interface DeploymentObjectDefinition extends DeploymentObjectName {
 }
 
 async function downloadSchema(url: string) {
-  const SCHEMA_URL = process.env.SCHEMA_DEFINITION_URL || url;  
+  const SCHEMA_URL = process.env.SCHEMA_DEFINITION_URL || url;
   const output = await httpsGet(SCHEMA_URL)
   return JSON.parse(output.toString()) as JSONSchema4;
 }

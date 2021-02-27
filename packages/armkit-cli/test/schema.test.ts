@@ -2,26 +2,44 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import { ImportArmSchema } from '../lib/import';
-import { CodeMaker } from 'codemaker';
-import * as $RefParser from "@apidevtools/json-schema-ref-parser";
+import { Language } from '../lib/base'
+
+test('container_instance_schema.test', async () => {
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'container_instance.test'));
+  const importer = new ImportArmSchema(`["2019-12-01/Microsoft.ContainerInstance"]`);
+
+  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
+
+  const output = fs.readFileSync(path.join(workdir, `ContainerInstance.ts`), 'utf-8');
+  expect(output).toMatchSnapshot();
+});
+
+test('container_registry_schema.test', async () => {
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'container_registry.test'));
+  const importer = new ImportArmSchema(`["2019-05-01/Microsoft.ContainerRegistry"]`);
+
+  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
+
+  const output = fs.readFileSync(path.join(workdir, `ContainerRegistry.ts`), 'utf-8');
+  expect(output).toMatchSnapshot();
+});
+
+test('container_service_schema.test', async () => {
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'container_service.test'));
+  const importer = new ImportArmSchema(`["2020-09-01/Microsoft.ContainerService"]`);
+
+  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
+
+  const output = fs.readFileSync(path.join(workdir, `ContainerService.ts`), 'utf-8');
+  expect(output).toMatchSnapshot();
+});
 
 test('storage_schema.test', async () => {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'storage.test'));
-  const spec = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'storage.json'), 'utf-8'));
-  const importer = new ImportArmSchema();
-  const code = new CodeMaker()
+  const importer = new ImportArmSchema(`["2019-06-01/Microsoft.Storage"]`);
 
-  const fileName = `storage.ts`;
+  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
 
-  code.openFile(fileName);
-  code.indentation = 2;
-  const resolved = await $RefParser.resolve(spec)
-  await importer.make(code, resolved);
-  code.closeFile(fileName);
-
-  await code.save(workdir)
-
-  console.log({ spec, workdir, fileName })
-  const output = fs.readFileSync(path.join(workdir, fileName), 'utf-8');
+  const output = fs.readFileSync(path.join(workdir, `Storage.ts`), 'utf-8');
   expect(output).toMatchSnapshot();
 });

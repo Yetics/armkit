@@ -22,23 +22,23 @@ export interface SchemaConfig {
   downloadUrl: string;
 }
 
-export abstract class ImportBase {  
+export abstract class ImportBase {
   protected abstract async generateTypeScript(code: CodeMaker, config?: SchemaConfig): Promise<void>;
   public readonly schemaConfig: SchemaConfig[];
 
-  constructor() {
-    this.schemaConfig = this.getSchemaConfig();
+  constructor(schemaConfig?: string) {
+    this.schemaConfig = this.getSchemaConfig(schemaConfig);
   }
 
-  public getSchemaConfig(): SchemaConfig[] {
+  public getSchemaConfig(schemaConfig?: string): SchemaConfig[] {
     const baseUrl = "https://schema.management.azure.com/schemas"
-    const config = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'schema-config.json')).toString()) as string[]
+    const config = JSON.parse(schemaConfig || fs.readFileSync(path.join(__dirname, '..', 'schema-config.json')).toString()) as string[]
 
     return config.map(value => {
-      const [version, fqn] = value.split('/')  
+      const [version, fqn] = value.split('/')
       const [, name] = fqn.split('.')
       const url = `${baseUrl}/${version}/${fqn}.json`
-    
+
       return {
         version,
         name,
