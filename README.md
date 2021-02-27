@@ -16,6 +16,7 @@ infrastructure definition and share it without worrying about boilerplate logic.
 Armkit is available in the following languages:
 
 * JavaScript, TypeScript ([Node.js ≥ 10.3.0](https://nodejs.org/download/release/latest-v10.x/))
+* TEST entry Node.js 13.12.0 - REMOVE!
 
 -------
 
