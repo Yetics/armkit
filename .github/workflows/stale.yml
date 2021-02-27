@@ -9,11 +9,11 @@ jobs:
   stale:
 
     runs-on: ubuntu-latest
+    container: 'node:current'
 
     steps:
     - uses: actions/stale@v1
       with:
-        node-version: 13.x
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         stale-issue-message: 'Stale issue message'
         stale-pr-message: 'Stale pull request message'
