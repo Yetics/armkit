@@ -1,9 +1,23 @@
 
 # Armkit (Azure Cloud Development Kit)
 
+- [Armkit](#)
+  - [Badges](#badges)
+  - [Introduction](#introduction)
+  - [Getting Started](#getting-started)
+  - [Packages](#packages)
+  - [Examples](#examples)
+  - [Contributing and Feedback](#contributing-and-feedback)
+  - [Building](#building)
+  - [Roadmap](#roadmap)
+  - [License](#license)
+
+## Badges
 [![Build Status](https://dev.azure.com/aheumaier/armkit/_apis/build/status/Yetics.armkit?branchName=master)](https://dev.azure.com/aheumaier/armkit/_build/latest?definitionId=10&branchName=master)
 [![Join the chat at https://gitter.im/Armkit/armkit](https://badges.gitter.im/Armkit/armkit.svg)](https://gitter.im/Armkit/armkit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NPM version](https://badge.fury.io/js/armkit.svg)](https://badge.fury.io/js/armkit)
+
+## Introduction
 
 The **Armkit (Azure Cloud Development Kit)** is an open-source software development
 framework to define cloud infrastructure in code and provision it through Azure ARM Templates.
@@ -16,9 +30,10 @@ infrastructure definition and share it without worrying about boilerplate logic.
 Armkit is available in the following languages:
 
 * JavaScript, TypeScript ([Node.js ≥ 10.3.0](https://nodejs.org/download/release/latest-v10.x/))
-* TEST entry Node.js 13.12.0 - REMOVE!
 
 -------
+
+## Getting Started
 
 Developers use the [Armkit framework] in one of the supported programming languages to define reusable cloud components called [constructs], which are composed together into [stacks], forming an "Armkit app".
 
@@ -26,6 +41,8 @@ They then use the [Armkit CLI](#) to interact with their Armkit app. The CLI all
 against a deployed stack to understand the impact of a code change.
 
 The [Armkit Construct Library](#) includes a module for each Azure service with constructs that offer rich APIs that encapsulate the details of how to use Azure. The Armkit Construct Library aims to reduce the complexity and glue-logic required when integrating various Azure services to achieve your goals on Azure.
+
+## Packages
 
 The CDK for Azure includes two packages:
 
@@ -118,6 +135,7 @@ Build the project and packages
 
 ```bash
 yarn build
+```
 
 ## Roadmap
 
