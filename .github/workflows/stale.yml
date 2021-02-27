@@ -12,6 +12,7 @@ jobs:
     steps:
     - uses: actions/stale@v1
       with:
+        node-version: '13.12.0'
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         stale-issue-message: 'Stale issue message'
         stale-pr-message: 'Stale pull request message'
