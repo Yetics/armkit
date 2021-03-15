@@ -113,6 +113,8 @@ CDK for Azure is an early experimental project and the development folks would l
 * Public [roadmap](https://github.com/yetics/armkit/projects/1).
 * Ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/armkit) and tag it with `armkit`
 * Come join the Armkit community on [Gitter](https://gitter.im/Armkit/armkit)
+* You are welcome to join the Armkit community on [Slack](cdk-dev.slack.com)
+
 
 We welcome community contributions and pull requests. See [CONTRIBUTING](./CONTRIBUTING.md) for information on how to set up a development environment and submit code.
 
