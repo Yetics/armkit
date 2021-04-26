@@ -5,14 +5,14 @@ import { ArmElement } from './arm-element';
 // import { deepMerge } from './util';
 
 interface TemplateSchema {
-  "$schema": string,
-  contentVersion: string,
-  apiProfile: string,
-  parameters: {[key: string]: any},
-  variables: {[key: string]: any},
-  functions: any[],
-  resources: any[],
-  outputs: {[key: string]: any}
+  "$schema": string;
+  contentVersion: string;
+  apiProfile: string;
+  parameters: { [key: string]: any };
+  variables: { [key: string]: any };
+  functions: any[];
+  resources: any[];
+  outputs: { [key: string]: any };
 }
 
 export class ArmStack extends Construct {
