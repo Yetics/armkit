@@ -1,5 +1,15 @@
-# Contributing to the Azure Cloud Development Kit
+Contributing to the Azure Cloud Development Kit (CDK)
 
+# Contributing to the Azure Cloud Development Kit (CDK)
+
+- [Contributing to the Azure Cloud Development Kit (CDK)](#contributing-to-the-azure-cloud-development-kit-cdk)
+  - [Summary](#summary)
+  - [Requirements](#requirements)
+  - [Building](#building)
+  - [Building a sample](#building-a-sample)
+  - [Running tests](#running-tests)
+
+## Summary
 Thanks for your interest in contributing to the AZURE CDK! ❤️
 
 This document describes how to set up a development environment and submit your contributions. Please read it carefully
@@ -7,29 +17,37 @@ and let us know if it's not up-to-date (even better, submit a PR with your  corr
 
 ## Requirements
 
-- NodeJS >= 1.13
+- NodeJS >= 12.17.0
 - Yarn
+- Lerna
 
-## Getting Started
+## Building
 
-Clone the repository:
+Clone the project repository
 
-```shell
-~$ git clone https://github.com/yetics/armkit.git
+```bash
+gh repo clone Yetics/armkit
 ```
 
-To compile the `armkit-cdk` binary for your local machine:
+Download dependencies
 
-```shell
-~/armkit$ yarn install
-~/armkit$ yarn build
+```bash
+cd armkit/
+yarn
+```
+
+Build the project and packages
+
+```bash
+(cd examples/basic ; yarn && yarn generate && yarn build)
+yarn build
 ```
 
 ## Building a sample
 
 `armkit` is a typescript core that translates the JSON Azure API schema definition to typescript code.
 
-To define which API we going to tranlate we use either the `SCHEMA_DEFINITION_URL` or `packages/armkit-cli/schema-config.json` to specify targets.
+To define which API we going to translate we use either the `SCHEMA_DEFINITION_URL` or `packages/armkit-cli/schema-config.json` to specify targets.
 
 Here is an example:
 
@@ -38,11 +56,9 @@ Here is an example:
 ```
 
 Triggering this process we call a `yarn generate` script section from `packages.json`. So we can call `yarn build && yarn generate` in `packages/armkit-cli`
-resulting in a `.generated` folder containing the typscript libraries
+resulting in a `.generated` folder containing the typescript libraries.
 
 - Go to `examples/basic`
-- Generate cdk libs with `yarn generate`
-- Translate to node.js: `yarn build`
 - Create the template `node index.js`
 - You are ready to deploy:
 
