@@ -131,26 +131,26 @@ export class TypeGenerator {
       }
 
       if (def.pattern) {
-        let cleantypeName = typeName
+        let cleanTypeName = typeName
 
         if (typeName.match("#")) {
           const parts = typeName.split("#") || []
-          cleantypeName = (parts[1] || '').substr('/definitions/'.length);
+          cleanTypeName = (parts[1] || '').substr('/definitions/'.length);
         }
-        // console.log({ cleantypeName })
-        this.emitPattern(`${toPascalCase(cleantypeName)}Pattern`, def, structFqn)
-        return `${toPascalCase(cleantypeName)}Pattern`
+        // console.log({ cleanTypeName })
+        this.emitPattern(`${toPascalCase(cleanTypeName)}Pattern`, def, structFqn)
+        return `${toPascalCase(cleanTypeName)}Pattern`
       }
 
       if (def.enum) {
-        let cleantypeName = typeName
+        let cleanTypeName = typeName
 
         if (typeName.match("#")) {
           const parts = typeName.split("#") || []
-          cleantypeName = (parts[1] || '').substr('/definitions/'.length);
+          cleanTypeName = (parts[1] || '').substr('/definitions/'.length);
         }
-        // console.log({ cleantypeName })
-        return this.emitEnum(`${toPascalCase(cleantypeName)}Enum`, def.enum)
+        // console.log({ cleanTypeName })
+        return this.emitEnum(`${toPascalCase(cleanTypeName)}Enum`, def.enum)
       }
 
       return 'string';
@@ -173,15 +173,15 @@ export class TypeGenerator {
     if (def.properties) {
       const parts = typeName.split("#") || [];
       if (parts.length > 1) {
-        const cleantypeName = toPascalCase(
+        const cleanTypeName = toPascalCase(
           (parts[1] || "").substr("/definitions/".length)
         );
-        this.emitStruct(cleantypeName, def, structFqn);
-        return cleantypeName;
+        this.emitStruct(cleanTypeName, def, structFqn);
+        return cleanTypeName;
       } else {
-        const cleantypeName = toPascalCase(parts[0]);
-        this.emitStruct(cleantypeName, def, structFqn);
-        return cleantypeName;
+        const cleanTypeName = toPascalCase(parts[0]);
+        this.emitStruct(cleanTypeName, def, structFqn);
+        return cleanTypeName;
       }
     }
     return 'any';
@@ -217,14 +217,14 @@ export class TypeGenerator {
         if (option.$ref) {
           type = this.typeForRef(option);
         } else if (option.enum) {
-          let cleantypeName = typeName
+          let cleanTypeName = typeName
 
           if (typeName.match("#")) {
             const parts = typeName.split("#") || []
-            cleantypeName = (parts[1] || '').substr('/definitions/'.length);
+            cleanTypeName = (parts[1] || '').substr('/definitions/'.length);
           }
 
-          type = this.emitEnum(`${cleantypeName}Enum`, option.enum)
+          type = this.emitEnum(`${cleanTypeName}Enum`, option.enum)
         } else if (!option.enum && option.type === 'array') {
           if (!option.items) type = 'any';
           const items = option.items as any

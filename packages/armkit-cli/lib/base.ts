@@ -23,7 +23,7 @@ export interface SchemaConfig {
 }
 
 export abstract class ImportBase {
-  protected abstract async generateTypeScript(code: CodeMaker, config?: SchemaConfig): Promise<void>;
+  protected abstract generateTypeScript(code: CodeMaker, config?: SchemaConfig): Promise<void>;
   public readonly schemaConfig: SchemaConfig[];
 
   constructor(schemaConfig?: string) {

@@ -1,44 +1,68 @@
-
+Armkit - The Azure Cloud Development Kit (CDK)
 # Armkit (Azure Cloud Development Kit)
+- [Armkit (Azure Cloud Development Kit)](#armkit-azure-cloud-development-kit)
+  - [Badges](#badges)
+  - [Contributing and Feedback](#contributing-and-feedback)
+  - [Summary](#summary)
+  - [Background](#background)
+  - [Examples](#examples)
+    - [**`helloArmkit.ts`**](#helloarmkitts)
+  - [Building](#building)
+  - [Roadmap](#roadmap)
+  - [License](#license)
+
+## Badges
 
 [![Build Status](https://dev.azure.com/aheumaier/armkit/_apis/build/status/Yetics.armkit?branchName=main)](https://dev.azure.com/aheumaier/armkit/_build/latest?definitionId=10&branchName=main)
-[![Join the chat at https://gitter.im/Armkit/armkit](https://badges.gitter.im/Armkit/armkit.svg)](https://gitter.im/Armkit/armkit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![NPM version](https://badge.fury.io/js/armkit.svg)](https://badge.fury.io/js/armkit)
 
-The **Armkit (Azure Cloud Development Kit)** is an open-source software development
-framework to define cloud infrastructure in code and provision it through Azure ARM Templates.
+## Contributing and Feedback
 
-It offers a high-level object-oriented abstraction to define Azure resources imperatively using
-the power of modern programming languages. Using the Armkit library of
-infrastructure constructs, you can easily encapsulate Azure best practices in your
-infrastructure definition and share it without worrying about boilerplate logic.
+[Slack](https://cdk-dev.slack.com/archives/C018XT6REKT)
 
-Armkit is available in the following languages:
+CDK for Azure is an early experimental project and the development folks would love your feedback to help guide the project.
 
-* JavaScript, TypeScript ([Node.js ≥ 10.3.0](https://nodejs.org/download/release/latest-v10.x/))
+* Report a [bug](https://github.com/yetics/armkit/issues/new?assignees=&labels=bug&template=bug-report.md&title=)
+* Request a new [feature](https://github.com/yetics/armkit/issues/new?assignees=&labels=enhancement&template=feature-request.md&title=).
+* Browse all [open issues](https://github.com/yetics/armkit/issues).
+* Public [roadmap](https://github.com/yetics/armkit/projects/1).
+* Ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/armkit) and tag it with `armkit`
+* Come join the Armkit community on [Gitter](https://gitter.im/Armkit/armkit)
 
--------
+We welcome community contributions and pull requests. See [CONTRIBUTING](./CONTRIBUTING.md) for information on how to set up a development environment and submit code.
 
-Developers use the [Armkit framework] in one of the supported programming languages to define reusable cloud components called [constructs], which are composed together into [stacks], forming an "Armkit app".
+## Summary
 
-They then use the [Armkit CLI](#) to interact with their Armkit app. The CLI allows developers to synthesize artifacts such as Azure ARM Templates, deploy stacks to development Azure accounts and "diff"
-against a deployed stack to understand the impact of a code change.
+`Armkit`, **Azure Cloud Development Kit (CDK),** is an open source software development framework to define cloud Infrastructure as Code (IaC) and provision it through `Azure ARM Templates`.
 
-The [Armkit Construct Library](#) includes a module for each Azure service with constructs that offer rich APIs that encapsulate the details of how to use Azure. The Armkit Construct Library aims to reduce the complexity and glue-logic required when integrating various Azure services to achieve your goals on Azure.
+It offers a high-level object-oriented abstraction to define `Azure` resources imperatively using the power of modern programming languages. Using the `Armkit` library of infrastructure constructs, you can easily encapsulate Azure best practices in your infrastructure definition and share it without worrying about boilerplate logic.
 
-The CDK for Azure includes two packages:
+`Armkit` is available in the following languages:
 
-* [@armkit/core](https://github.com/Yetics/armkit/tree/development/packages/%40armkit/core) - A library for defining Azure resources using programming constructs.
-* [armkit-cli](https://github.com/Yetics/armkit/tree/development/packages/armkit-cli) - A CLI that allows users to run commands to initialize, import, and synthesize CDK for Azure applications.
+- JavaScript/TypeScript ([Node.js ≥ 12.17.0](https://nodejs.org/download/release/latest-v12.x/))
 
+## Background
+
+Developers use the `Armkit` framework in one of the supported programming
+languages to define reusable cloud components called `constructs`, which
+are composed together into `stacks`, forming an "`Armkit` app".
+
+They then use the [Armkit CLI](packages/armkit-cli) to interact with their `Armkit` app. The CLI allows developers to synthesize artifacts such as `Azure ARM Templates`, deploy `stacks` to development `Azure` accounts and `diff` against a deployed `stack` to understand the impact of a code change.
+
+The [Armkit Construct Library](packages/@armkit/core) includes a module for each `Azure` service with constructs that offer rich APIs that encapsulate the details of how to use Azure. The `Armkit` Construct Library aims to reduce the complexity and glue-logic required when integrating various `Azure` services to achieve your goals on Azure.
+
+Armkit packages:
+
+* [@armkit/core](https://github.com/Yetics/armkit/tree/development/packages/%40armkit/core) - A library for defining `Azure` resources using programming `constructs`.
+* [armkit-cli](https://github.com/Yetics/armkit/tree/development/packages/armkit-cli) - A CLI that allows users to run commands to initialize, import, and synthesize `Armkit` applications.
 
 ## Examples
 
-We generated some sample constructs in [examples](./examples/README.md). This   could look like this:
+Some sample `constructs` are in [examples](./examples/README.md). This could look like this:
 
-#### **`helloArmkit.ts`**
+### **`helloArmkit.ts`**
 
-```ts 
+```ts
 import { Construct } from 'constructs';
 import { App, ArmStack } from '@armkit/core';
 import {
@@ -84,49 +108,39 @@ new HelloArmkit(app, 'hello-armkit');
 app.synth();
 ```
 
-For a detailed walkthrough, see the Armkit [Developer Guide](./CONTRIBUTING.md).
-
-## Contributing and Feedback
-
-CDK for Azure is an early experimental project and the development folks would love your feedback to help guide the project.
-
-* Report a [bug](https://github.com/yetics/armkit/issues/new?assignees=&labels=bug&template=bug-report.md&title=) or request a new [feature](https://github.com/yetics/armkit/issues/new?assignees=&labels=enhancement&template=feature-request.md&title=).
-* Browse all [open issues](https://github.com/yetics/armkit/issues).
-* Public [roadmap](https://github.com/yetics/armkit/projects/1).
-* Ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/armkit) and tag it with `armkit`
-* Come join the Armkit community on [Gitter](https://gitter.im/Armkit/armkit)
-
-We welcome community contributions and pull requests. See [CONTRIBUTING](./CONTRIBUTING.md) for information on how to set up a development environment and submit code.
+For a detailed walk through, see the Armkit [Developer Guide](./CONTRIBUTING.md).
 
 ## Building
 
 Clone the project repository
 
 ```bash
-git clone https://github.com/Yetics/armkit.git
+gh repo clone Yetics/armkit
 ```
 
 Download dependencies
 
 ```bash
 cd armkit/
-yarn install
+yarn
 ```
 
 Build the project and packages
 
 ```bash
+(cd examples/basic ; yarn && yarn generate && yarn build)
 yarn build
-
+```
 ## Roadmap
 
-The [Armkit Roadmap project board] lets developers know about our upcoming features and priorities to help them plan how to best leverage the Armkit and identify opportunities to contribute to the project. See [ROADMAP] for more information and FAQs.
+The [Armkit Roadmap project board](https://github.com/Yetics/armkit/projects) lets developers know about our upcoming
+features and priorities to help them plan how to best leverage `Armkit`and identify opportunities to contribute to the project. See [ROADMAP](./ROADMAP.md) for more information and FAQs.
 
-[Armkit Roadmap project board]: https://github.com/Armkit/armkit/projects/1
-[Roadmap]: https://github.com/Armkit/armkit/ROADMAP.md
+- `Armkit` Roadmap project board: https://github.com/Armkit/armkit/projects/1
+- Roadmap: https://github.com/Armkit/armkit/ROADMAP.md
 
 ## License
 
-The Armkit is distributed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+`Armkit` is distributed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
 See [LICENSE](./LICENSE) and [NOTICE](./NOTICE) for more information.
