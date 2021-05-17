@@ -150,7 +150,7 @@ export class TypeGenerator {
           cleanTypeName = (parts[1] || '').substr('/definitions/'.length);
         }
         // console.log({ cleanTypeName })
-        return this.emitEnum(`${toPascalCase(cleanTypeName)}Enum`, def.enum)
+        return this.emitEnum(`${toPascalCase(cleanTypeName)}`, def.enum)
       }
 
       return 'string';
@@ -224,7 +224,7 @@ export class TypeGenerator {
             cleanTypeName = (parts[1] || '').substr('/definitions/'.length);
           }
 
-          type = this.emitEnum(`${cleanTypeName}Enum`, option.enum)
+          type = this.emitEnum(`${cleanTypeName}`, option.enum)
         } else if (!option.enum && option.type === 'array') {
           if (!option.items) type = 'any';
           const items = option.items as any
