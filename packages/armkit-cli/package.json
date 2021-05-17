@@ -10,7 +10,8 @@
     "watch": "tsc -w",
     "lint": "eslint . --ext .ts",
     "test": "jest",
-    "package": "./package.sh"
+    "package": "./package.sh",
+    "generate": "armkit generate"
   },
   "keywords": [
     "armkit",
