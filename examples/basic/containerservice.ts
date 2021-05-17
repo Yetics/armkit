@@ -7,7 +7,7 @@ import {
   Registries, MicrosoftContainerRegistryRegistriesApiVersion, MicrosoftContainerRegistryRegistriesType, SkuName
 } from './.generated/ContainerRegistry'
 
-export class HelloArmkit extends ArmStack {
+export class HelloContainerGroup extends ArmStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -55,5 +55,5 @@ export class HelloArmkit extends ArmStack {
 }
 
 const app = new App({ outdir: 'cdk.out' });
-new HelloArmkit(app, 'hello-armkit');
+new HelloContainerGroup(app, 'hello-containerinstance');
 app.synth();
