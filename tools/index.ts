@@ -87,6 +87,34 @@ function getRefs(items) {
     }
 }
 
+function keepLatestVersions(resources) {
+    let groups = resources.map(function(resource) {
+        return {
+            name: resource.substring(55),
+            version: resource.substring(44, 54)
+        } 
+    });
+
+    groups = groups.sort(function(x, y) {
+        if (x.name > y.name) return 1; // name ascending
+        else if (x.name < y.name) return -1;
+        else {
+            if (x.version < y.version) return 1; // version descending
+            else if (x.version > y.version) return -1;
+            else return 0;
+        }
+    });
+
+    groups = groups.reduce(function(accumulated, current) { 
+        if (!accumulated.find((value) => value.name === current.name && value.version >= current.version)) { 
+            accumulated.push(current); 
+        } 
+        return accumulated; 
+    }, []);
+
+    return groups.map(group => `${group.version}/${group.name}`);
+}
+
 function getResourceList(contents: string) {
     let items = contents['properties'].resources.items;
 
@@ -95,6 +123,7 @@ function getResourceList(contents: string) {
 
     resources = resources
         .filter(resource => resource.startsWith('https://schema.management.azure.com/schemas/2')) // Filter the ones referencing versioned schemas
+        .filter(resource => resource.indexOf('preview') < 0) // Exclude preview
         .map(resource => resource.substring(0, resource.indexOf('#')))    // Keep the file reference only
         .reduce(function(accumulated, current) { 
             if (!accumulated.find((value) => value === current)) { 
@@ -103,7 +132,7 @@ function getResourceList(contents: string) {
             return accumulated; 
         }, []); // Remove duplicates
 
-    return resources;
+    return keepLatestVersions(resources);
 }
 
 async function main() {
