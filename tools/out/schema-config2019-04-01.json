@@ -1,0 +1,21 @@
+[
+    "2020-01-01/Microsoft.Advisor.json",
+    "2019-09-01/Microsoft.Authorization.json",
+    "2015-08-01/Microsoft.CertificateRegistration.json",
+    "2020-12-01/Microsoft.Compute.Extensions.json",
+    "2019-03-01/Microsoft.Compute.Galleries.json",
+    "2020-12-01/Microsoft.Compute.json",
+    "2015-04-01/Microsoft.DomainRegistration.json",
+    "2014-04-01/Microsoft.Insights.ManuallyAuthored.json",
+    "2020-09-18/Microsoft.Kusto.json",
+    "2017-07-01/Microsoft.Logic.json",
+    "2018-11-30/Microsoft.ManagedIdentity.json",
+    "2019-06-01/Microsoft.ManagedServices.json",
+    "2018-07-01/Microsoft.Media.json",
+    "2020-11-01/Microsoft.Network.json",
+    "2017-07-01/Microsoft.RecoveryServices.json",
+    "2016-06-01/Microsoft.RecoveryServices.legacy.json",
+    "2015-01-01/Microsoft.Resources.json",
+    "2018-11-01/Microsoft.Web.json",
+    "2015-01-01/Sendgrid.Email.json"
+]

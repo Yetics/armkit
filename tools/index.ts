@@ -12,9 +12,9 @@ function filterVersions(body) {
     body = body.filter((schema) => schema.name.match(/^[\d-]+$/) != null);
 
     // Sort descending by name.
-    body.sort((x, y) => x.name < y.name ? 1 : -1);
+    body = body.sort((x, y) => x.name < y.name ? 1 : -1);
 
-    return body.filter((schema) => schema.name == '2019-04-01');
+    return body;
 }
 
 function fromBase64(s: string) {
@@ -29,21 +29,15 @@ async function hasDeploymentTemplate(ghrepo, schema) {
     return body.find(file => file.name == 'deploymentTemplate.json') !== undefined;
 }
 
-async function getSchemaWithTemplate(ghrepo) {
+async function getSchemasWithTemplate(ghrepo) {
     let body = await ghrepo.contentsAsync('/schemas');
     body = body[0];
 
     body = filterVersions(body);
     
-    let i;
-    for (i=0; i<body.length; i++) {
-        let schema = body[i];
+    body = body.filter(async schema => await hasDeploymentTemplate(ghrepo, schema));
 
-        let containsSchemaList = await hasDeploymentTemplate(ghrepo, schema);
-        if (containsSchemaList) {
-            return schema;
-        }
-    }
+    return body;
 }
 
 async function getTemplateContents(ghrepo, schema) {
@@ -137,11 +131,22 @@ function getResourceList(contents: string) {
 
 async function main() {
     var ghrepo = getRepo(process.env.GITHUB_ACCESS_TOKEN);
-    let schema = await getSchemaWithTemplate(ghrepo);
-    let contents = await getTemplateContents(ghrepo, schema);
+    let schemas = await getSchemasWithTemplate(ghrepo);
 
-    let resourceList = getResourceList(contents);
-    console.log(resourceList);
+    schemas.forEach(async schema => {
+        let contents = await getTemplateContents(ghrepo, schema);
+
+        var object = JSON.parse(contents);
+        let resourceList = getResourceList(object);
+
+        let fs = require('fs');
+        fs.writeFile(
+            `out/schema-config${schema.name}.json`, 
+            JSON.stringify(resourceList), 
+            '', 
+            (err) => console.log(err));
+    });
+   
 }
 
 function testFileLoad() {
@@ -159,7 +164,7 @@ function testFileLoad() {
     });
 }
 
-testFileLoad();
+main();
 
 export {}
 
