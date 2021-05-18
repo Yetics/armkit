@@ -4,52 +4,144 @@ import * as path from 'path';
 import { ImportArmSchema } from '../lib/import';
 import { Language } from '../lib/base'
 
-test('container_instance_schema.test', async () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'container_instance.test'));
-  const importer = new ImportArmSchema(`["2019-12-01/Microsoft.ContainerInstance"]`);
+// Comprehensive list of services.
+const services =
+  [
+    ["2021-03-01/Microsoft.Kubernetes", "Kubernetes"],
+    ["2021-03-01/Microsoft.AAD", "AAD"],
+    ["2020-09-01/Microsoft.DataShare", "DataShare"],
+    ["2015-04-01/Microsoft.DomainRegistration", "DomainRegistration"],
+    ["2018-04-19/Microsoft.DataMigration", "DataMigration"],
+    ["2015-08-01/Microsoft.CertificateRegistration", "CertificateRegistration"],
+    ["2016-03-01/Microsoft.Scheduler", "Scheduler"],
+    ["2019-09-01/Microsoft.KeyVault", "KeyVault"],
+    ["2021-01-01/Microsoft.MixedReality", "MixedReality"],
+    ["2020-08-01/Microsoft.Search", "Search"],
+    ["2021-05-01/Microsoft.Resources", "Resources"],
+    ["2020-12-01/Microsoft.ApiManagement", "ApiManagement"],
+    ["2020-01-01/Microsoft.SecurityInsights", "SecurityInsights"],
+    ["2020-08-20/Microsoft.Communication", "Communication"],
+    ["2015-06-01/Microsoft.KeyVault.Secrets", "KeyVault.Secrets"],
+    ["2021-06-01/Microsoft.AVS", "AVS"],
+    ["2020-03-01/Microsoft.Confluent", "Confluent"],
+    ["2020-04-01/Microsoft.Support", "Support"],
+    ["2014-04-01/Microsoft.Sql", "Sql"],
+    ["2020-07-01/Microsoft.AppPlatform", "AppPlatform"],
+    ["2016-11-01/Microsoft.DataLakeStore", "DataLakeStore"],
+    ["2018-02-01/Microsoft.ManagementPartner", "ManagementPartner"],
+    ["2018-11-01/Microsoft.Web", "Web"],
+    ["2021-02-01/Microsoft.Maps", "Maps"],
+    ["2018-06-01/Microsoft.DBforMariaDB", "DBforMariaDB"],
+    ["2021-04-01/Microsoft.MachineLearningServices", "MachineLearningServices"],
+    ["2018-12-03/Microsoft.EnterpriseKnowledgeGraph", "EnterpriseKnowledgeGraph"],
+    ["2021-01-01/Microsoft.PowerBIDedicated", "PowerBIDedicated"],
+    ["2021-03-08/Microsoft.Insights.Application", "Insights.Application"],
+    ["2021-01-01/Microsoft.ImportExport", "ImportExport"],
+    ["2020-10-25/Microsoft.Capacity", "Capacity"],
+    ["2020-09-18/Microsoft.Kusto", "Kusto"],
+    ["2020-12-01/Microsoft.DigitalTwins", "DigitalTwins"],
+    ["2020-01-01/Microsoft.Advisor", "Advisor"],
+    ["2021-04-15/Microsoft.DocumentDB", "DocumentDB"],
+    ["2017-07-01/Microsoft.Logic", "Logic"],
+    ["2019-06-01/Microsoft.WindowsIoT", "WindowsIoT"],
+    ["2019-06-01/Microsoft.Automation", "Automation"],
+    ["2020-11-01/Microsoft.Network.FrontDoor", "Network.FrontDoor"],
+    ["2020-12-01/Microsoft.DataBoxEdge", "DataBoxEdge"],
+    ["2021-03-01/Microsoft.ContainerInstance", "ContainerInstance"],
+    ["2017-04-18/Microsoft.CognitiveServices", "CognitiveServices"],
+    ["2018-06-01/Microsoft.DataFactory", "DataFactory"],
+    ["2021-01-01/Microsoft.Peering", "Peering"],
+    ["2016-03-01/Microsoft.StreamAnalytics", "StreamAnalytics"],
+    ["2020-05-01/Microsoft.Billing", "Billing"],
+    ["2018-09-01/Microsoft.IotCentral", "IotCentral"],
+    ["2020-03-01/Microsoft.ServiceFabric", "ServiceFabric"],
+    ["2019-06-01/Microsoft.ManagedServices", "ManagedServices"],
+    ["2021-03-01/Microsoft.BotService", "BotService"],
+    ["2021-03-01/Microsoft.KubernetesConfiguration", "KubernetesConfiguration"],
+    ["2021-01-11/Microsoft.HealthcareApis", "HealthcareApis"],
+    ["2015-01-01/Sendgrid.Email", "Email"],
+    ["2020-05-15/Microsoft.TimeSeriesInsights", "TimeSeriesInsights"],
+    ["2020-01-01/Microsoft.Security", "Security"],
+    ["2021-03-01/Microsoft.RecoveryServices", "RecoveryServices"],
+    ["2020-03-01/Microsoft.Devices.Provisioning", "Devices.Provisioning"],
+    ["2020-08-02/Microsoft.HybridCompute", "HybridCompute"],
+    ["2021-01-01/Microsoft.Migrate", "Migrate"],
+    ["2016-06-01/Microsoft.RecoveryServices.legacy", "RecoveryServices.legacy"],
+    ["2020-12-01/Microsoft.Marketplace", "Marketplace"],
+    ["2021-04-01/Microsoft.Storage", "Storage"],
+    ["2016-03-30/Microsoft.DataCatalog", "DataCatalog"],
+    ["2018-11-30/Microsoft.ManagedIdentity", "ManagedIdentity"],
+    ["2020-12-01/Microsoft.Compute.Extensions", "Compute.Extensions"],
+    ["2021-03-01/Microsoft.RecoveryServices.SiteRecovery", "RecoveryServices.SiteRecovery"],
+    ["2020-12-08/Microsoft.HealthBot", "HealthBot"],
+    ["2021-01-01/Microsoft.Batch", "Batch"],
+    ["2018-05-01/Microsoft.BatchAI", "BatchAI"],
+    ["2020-10-01/Microsoft.OperationalInsights", "OperationalInsights"],
+    ["2021-02-01/Microsoft.NetApp", "NetApp"],
+    ["2017-04-01/Microsoft.EventHub", "EventHub"],
+    ["2021-03-01/Microsoft.Synapse", "Synapse"],
+    ["2021-03-01/Microsoft.ContainerService", "ContainerService"],
+    ["2017-06-01/Microsoft.StorSimple.8000", "StorSimple.8000"],
+    ["2016-11-01/Microsoft.DataLakeAnalytics", "DataLakeAnalytics"],
+    ["2017-08-01/Microsoft.AnalysisServices", "AnalysisServices"],
+    ["2017-04-01/Microsoft.Relay", "Relay"],
+    ["2019-10-01/Microsoft.MachineLearning", "MachineLearning"],
+    ["2019-05-01/Microsoft.ContainerRegistry", "ContainerRegistry"],
+    ["2021-01-25/Microsoft.GuestConfiguration", "GuestConfiguration"],
+    ["2021-03-31/Microsoft.Devices", "Devices"],
+    ["2017-04-01/Microsoft.NotificationHubs", "NotificationHubs"],
+    ["2020-09-01/Microsoft.Cdn", "Cdn"],
+    ["2020-01-01/Microsoft.DBforPostgreSQL", "DBforPostgreSQL"],
+    ["2019-03-01/Microsoft.Compute.Galleries", "Compute.Galleries"],
+    ["2020-04-30/Microsoft.RedHatOpenShift", "RedHatOpenShift"],
+    ["2020-12-01/Microsoft.Cache", "Cache"],
+    ["2020-10-01/Microsoft.Attestation", "Attestation"],
+    ["2017-04-01/Microsoft.ServiceBus", "ServiceBus"],
+    ["2017-06-01/Microsoft.AzureStack", "AzureStack"],
+    ["2019-04-01/Microsoft.DevSpaces", "DevSpaces"],
+    ["2020-02-14/Microsoft.VirtualMachineImages", "VirtualMachineImages"],
+    ["2020-10-01/Microsoft.Insights", "Insights"],
+    ["2019-04-01/Microsoft.VMwareCloudSimple", "VMwareCloudSimple"],
+    ["2018-10-15/Microsoft.LabServices", "LabServices"],
+    ["2018-04-01/Microsoft.Databricks", "Databricks"],
+    ["2020-09-01/Microsoft.StorageSync", "StorageSync"],
+    ["2019-06-01/Microsoft.HybridData", "HybridData"],
+    ["2021-03-01/Microsoft.RecoveryServices.Backup", "RecoveryServices.Backup"],
+    ["2021-05-01/Microsoft.Consumption", "Consumption"],
+    ["2020-06-01/Microsoft.EventGrid", "EventGrid"],
+    ["2021-03-01/Microsoft.StorageCache", "StorageCache"],
+    ["2018-03-01/Microsoft.Addons", "Addons"],
+    ["2019-09-01/Microsoft.Authorization", "Authorization"],
+    ["2014-04-01/Microsoft.Insights.ManuallyAuthored", "Insights.ManuallyAuthored"],
+    ["2021-03-01/Microsoft.DataBox", "DataBox"],
+    ["2021-05-01/Microsoft.Maintenance", "Maintenance"],
+    ["2019-12-01/Microsoft.SoftwarePlan", "SoftwarePlan"],
+    ["2020-09-01/Microsoft.Subscription", "Subscription"],
+    ["2018-05-01/Microsoft.SerialConsole", "SerialConsole"],
+    ["2021-04-01/Microsoft.Management", "Management"],
+    ["2017-04-01/Microsoft.Aadiam", "Aadiam"],
+    ["2016-10-01/Microsoft.StorSimple.1200", "StorSimple.1200"],
+    ["2021-01-01/Microsoft.PolicyInsights", "PolicyInsights"],
+    ["2020-06-01/Microsoft.AppConfiguration", "AppConfiguration"],
+    ["2016-01-29/Microsoft.PowerBI", "PowerBI"],
+    ["2020-12-01/Microsoft.Compute", "Compute"],
+    ["2018-09-15/Microsoft.DevTestLab", "DevTestLab"],
+    ["2020-01-01/Microsoft.DBforMySQL", "DBforMySQL"],
+    ["2021-03-01/Microsoft.Cache.Enterprise", "Cache.Enterprise"],
+    ["2020-05-01/Microsoft.SignalRService", "SignalRService"],
+    ["2021-03-01/Microsoft.Datadog", "Datadog"],
+    ["2020-11-01/Microsoft.Network", "Network"],
+    ["2018-07-01/Microsoft.Media", "Media"],
+    ["2020-07-07/Microsoft.OffAzure", "OffAzure"],
+    ["2021-04-01/Microsoft.AlertsManagement", "AlertsManagement"],
+  ];
+
+test.each(services)('%s.test', async (schemaConfig, serviceName) => {
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), serviceName + '.test'));
+  const importer = new ImportArmSchema(`["` + schemaConfig + `"]`);
 
   await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
 
-  const output = fs.readFileSync(path.join(workdir, `ContainerInstance.ts`), 'utf-8');
-  expect(output).toMatchSnapshot();
-});
-
-test('container_registry_schema.test', async () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'container_registry.test'));
-  const importer = new ImportArmSchema(`["2019-05-01/Microsoft.ContainerRegistry"]`);
-
-  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
-
-  const output = fs.readFileSync(path.join(workdir, `ContainerRegistry.ts`), 'utf-8');
-  expect(output).toMatchSnapshot();
-});
-
-test('container_service_schema.test', async () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'container_service.test'));
-  const importer = new ImportArmSchema(`["2020-09-01/Microsoft.ContainerService"]`);
-
-  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
-
-  const output = fs.readFileSync(path.join(workdir, `ContainerService.ts`), 'utf-8');
-  expect(output).toMatchSnapshot();
-});
-
-test('storage_schema.test', async () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'storage.test'));
-  const importer = new ImportArmSchema(`["2019-06-01/Microsoft.Storage"]`);
-
-  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
-
-  const output = fs.readFileSync(path.join(workdir, `Storage.ts`), 'utf-8');
-  expect(output).toMatchSnapshot();
-});
-
-test('mixed_reality.test', async () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'mixed_reality.test'));
-  const importer = new ImportArmSchema(`["2021-01-01/Microsoft.MixedReality"]`);
-
-  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
-
-  const output = fs.readFileSync(path.join(workdir, `MixedReality.ts`), 'utf-8');
+  const output = fs.readFileSync(path.join(workdir, serviceName + `.ts`), 'utf-8');
   expect(output).toMatchSnapshot();
 });
