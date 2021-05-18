@@ -43,3 +43,13 @@ test('storage_schema.test', async () => {
   const output = fs.readFileSync(path.join(workdir, `Storage.ts`), 'utf-8');
   expect(output).toMatchSnapshot();
 });
+
+test('mixed_reality.test', async () => {
+  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'mixed_reality.test'));
+  const importer = new ImportArmSchema(`["2021-01-01/Microsoft.MixedReality"]`);
+
+  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
+
+  const output = fs.readFileSync(path.join(workdir, `MixedReality.ts`), 'utf-8');
+  expect(output).toMatchSnapshot();
+});
