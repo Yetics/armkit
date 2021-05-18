@@ -108,6 +108,7 @@ const services =
     ["2021-03-01/Microsoft.Datadog", "Datadog"],
     ["2020-07-07/Microsoft.OffAzure", "OffAzure"],
     ["2021-04-01/Microsoft.AlertsManagement", "AlertsManagement"],
+    ["2021-03-01/Microsoft.DataBox", "DataBox"],
   ];
 
 test.each(services)('%s.test', async (schemaConfig, serviceName) => {
@@ -119,35 +120,3 @@ test.each(services)('%s.test', async (schemaConfig, serviceName) => {
   const output = fs.readFileSync(path.join(workdir, serviceName + `.ts`), 'utf-8');
   expect(output).toMatchSnapshot();
 });
-
-/*
-Not working services
-
-    ["2020-11-01/Microsoft.Network", "Network"],
-    ["2018-07-01/Microsoft.Media", "Media"],
-    ["2021-03-01/Microsoft.Cache.Enterprise", "Cache.Enterprise"],
-    ["2020-12-01/Microsoft.Compute", "Compute"],
-    ["2016-10-01/Microsoft.StorSimple.1200", "StorSimple.1200"],
-    ["2021-03-01/Microsoft.DataBox", "DataBox"],
-    ["2014-04-01/Microsoft.Insights.ManuallyAuthored", "Insights.ManuallyAuthored"],
-    ["2021-03-01/Microsoft.RecoveryServices.Backup", "RecoveryServices.Backup"],
-    ["2020-12-01/Microsoft.Cache", "Cache"],
-    ["2019-03-01/Microsoft.Compute.Galleries", "Compute.Galleries"],
-    ["2021-03-31/Microsoft.Devices", "Devices"],
-    ["2017-06-01/Microsoft.StorSimple.8000", "StorSimple.8000"],
-    ["2021-02-01/Microsoft.NetApp", "NetApp"],
-    ["2021-03-01/Microsoft.RecoveryServices.SiteRecovery", "RecoveryServices.SiteRecovery"],
-    ["2020-12-01/Microsoft.Compute.Extensions", "Compute.Extensions"],
-    ["2021-04-01/Microsoft.Storage", "Storage"],
-    ["2016-06-01/Microsoft.RecoveryServices.legacy", "RecoveryServices.legacy"],
-    ["2020-03-01/Microsoft.Devices.Provisioning", "Devices.Provisioning"],
-    ["2020-11-01/Microsoft.Network.FrontDoor", "Network.FrontDoor"],
-    ["2019-06-01/Microsoft.Automation", "Automation"],
-    ["2020-09-18/Microsoft.Kusto", "Kusto"],
-    ["2021-03-08/Microsoft.Insights.Application", "Insights.Application"],
-    ["2018-11-01/Microsoft.Web", "Web"],
-    ["2021-06-01/Microsoft.AVS", "AVS"],
-    ["2015-06-01/Microsoft.KeyVault.Secrets", "KeyVault.Secrets"],
-    ["2020-12-01/Microsoft.ApiManagement", "ApiManagement"],
-
-*/
