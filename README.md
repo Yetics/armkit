@@ -133,7 +133,7 @@ Build the `examples` package.
 cd examples/basic ; yarn && yarn generate && yarn build
 ```
 
-Restore `workspaces > packages > examples/*` from `package.json` ([Issue 42](https://github.com/Yetics/armkit/issues/42)) and build.
+Restore `workspaces > packages > examples/*` to `package.json` ([Issue 42](https://github.com/Yetics/armkit/issues/42)) and build.
 
 ```bash
 (cd armkit)
