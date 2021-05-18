@@ -125,12 +125,21 @@ cd armkit/
 yarn
 ```
 
-Build the project and packages
+Temporarily remove `workspaces > packages > examples/*` from `package.json` (See #42).
+
+Build the `examples` package.
 
 ```bash
-(cd examples/basic ; yarn && yarn generate && yarn build)
+cd examples/basic ; yarn && yarn generate && yarn build
+```
+
+Restore `workspaces > packages > examples/*` from `package.json` (See #42) and build.
+
+```bash
+(cd armkit)
 yarn build
 ```
+
 ## Roadmap
 
 The [Armkit Roadmap project board](https://github.com/Yetics/armkit/projects) lets developers know about our upcoming
