@@ -1,0 +1,198 @@
+{
+  "id": "https://schema.management.azure.com/schemas/2020-09-01/Microsoft.ContainerService.json#",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Microsoft.ContainerService",
+  "description": "Microsoft ContainerService Resource Types",
+  "resourceDefinitions": {
+    "managedClusters": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "enum": ["2020-09-01"]
+        },
+        "identity": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/ManagedClusterIdentity"
+            },
+            {
+              "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
+            }
+          ],
+          "description": "Identity for the managed cluster."
+        },
+        "location": {
+          "type": "string",
+          "description": "Resource location"
+        },
+        "name": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9]$|^[a-zA-Z0-9][-_a-zA-Z0-9]{0,61}[a-zA-Z0-9]$",
+              "minLength": 1,
+              "maxLength": 63
+            },
+            {
+              "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
+            }
+          ],
+          "description": "The name of the managed cluster resource."
+        },
+        "properties": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/ManagedClusterProperties"
+            },
+            {
+              "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
+            }
+          ],
+          "description": "Properties of the managed cluster."
+        },
+        "resources": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/managedClusters_agentPools_childResource"
+              },
+              {
+                "$ref": "#/definitions/managedClusters_privateEndpointConnections_childResource"
+              }
+            ]
+          }
+        },
+        "sku": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/ManagedClusterSKU"
+            },
+            {
+              "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
+            }
+          ]
+        },
+        "tags": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "properties": {}
+            },
+            {
+              "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
+            }
+          ],
+          "description": "Resource tags"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["Microsoft.ContainerService/managedClusters"]
+        }
+      },
+      "required": ["apiVersion", "location", "name", "properties", "type"],
+      "description": "Microsoft.ContainerService/managedClusters"
+    },
+    "definitions": {
+      "ManagedClusterProperties": {
+        "type": "object",
+        "properties": {
+          "aadProfile": {
+            "oneOf": [],
+            "description": "AADProfile specifies attributes for Azure Active Directory integration."
+          },
+          "addonProfiles": {
+            "oneOf": [],
+            "description": "Profile of managed cluster add-on."
+          },
+          "agentPoolProfiles": {
+            "oneOf": [],
+            "description": "Properties of the agent pool."
+          },
+          "apiServerAccessProfile": {
+            "oneOf": [],
+            "description": "Access profile for managed cluster API server."
+          },
+          "autoScalerProfile": {
+            "oneOf": [
+              {
+                "$ref": "#/definitions/ManagedClusterPropertiesAutoScalerProfile"
+              },
+              {
+                "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
+              }
+            ],
+            "description": "Parameters to be applied to the cluster-autoscaler when enabled"
+          }
+        }
+      },
+
+      "ManagedClusterPropertiesAutoScalerProfile": {
+        "type": "object",
+        "properties": {
+          "balance-similar-node-groups": {
+            "type": "string"
+          },
+          "expander": {
+            "oneOf": [
+              {
+                "type": "string",
+                "enum": ["least-waste", "most-pods", "random"]
+              },
+              {
+                "$ref": "https://schema.management.azure.com/schemas/common/definitions.json#/definitions/expression"
+              }
+            ]
+          },
+          "max-empty-bulk-delete": {
+            "type": "string"
+          },
+          "max-graceful-termination-sec": {
+            "type": "string"
+          },
+          "max-total-unready-percentage": {
+            "type": "string"
+          },
+          "new-pod-scale-up-delay": {
+            "type": "string"
+          },
+          "ok-total-unready-count": {
+            "type": "string"
+          },
+          "scale-down-delay-after-add": {
+            "type": "string"
+          },
+          "scale-down-delay-after-delete": {
+            "type": "string"
+          },
+          "scale-down-delay-after-failure": {
+            "type": "string"
+          },
+          "scale-down-unneeded-time": {
+            "type": "string"
+          },
+          "scale-down-unready-time": {
+            "type": "string"
+          },
+          "scale-down-utilization-threshold": {
+            "type": "string"
+          },
+          "scan-interval": {
+            "type": "string"
+          },
+          "skip-nodes-with-local-storage": {
+            "type": "string"
+          },
+          "skip-nodes-with-system-pods": {
+            "type": "string"
+          }
+        },
+        "description": "Parameters to be applied to the cluster-autoscaler when enabled"
+      }
+    }
+  }
+}

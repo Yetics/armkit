@@ -1,6 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { CodeMaker } from 'codemaker';
+import { string, version } from 'yargs';
 
 export enum Language {
   TYPESCRIPT = 'typescript',
@@ -9,11 +10,11 @@ export enum Language {
   JAVA = 'java',
 }
 
-export const LANGUAGES = [ Language.TYPESCRIPT, Language.PYTHON ];
+export const LANGUAGES = [Language.TYPESCRIPT, Language.PYTHON];
 
 export interface ImportOptions {
   readonly targetLanguage: Language;
-  readonly outdir: string;
+  readonly outdir: string
 }
 
 export interface SchemaConfig {
@@ -32,19 +33,41 @@ export abstract class ImportBase {
 
   public getSchemaConfig(schemaConfig?: string): SchemaConfig[] {
     const baseUrl = "https://schema.management.azure.com/schemas"
-    const config = JSON.parse(schemaConfig || fs.readFileSync(path.join(__dirname, '..', 'schema-config.json')).toString()) as string[]
 
-    return config.map(value => {
-      const [version, fqn] = value.split('/')
-      const [, name] = fqn.split('.')
-      const url = `${baseUrl}/${version}/${fqn}.json`
+    if (schemaConfig?.startsWith("file://")) {
 
-      return {
-        version,
-        name,
-        downloadUrl: url
-      } as SchemaConfig
-    })
+      console.log(`Found file ${schemaConfig}`)
+      
+      const config = [schemaConfig]
+
+      return config.map(value => {
+        const [version, fqn] = value.split('/')
+        const [, name] = fqn.split('.')
+        const url = `${baseUrl}/${version}/${fqn}.json`
+
+        return {
+          version,
+          name,
+          downloadUrl: url
+        } as SchemaConfig
+      })
+
+    } else {
+
+      const config = JSON.parse(schemaConfig || fs.readFileSync(path.join(__dirname, '..', 'schema-config.json')).toString()) as string[]
+
+      return config.map(value => {
+        const [version, fqn] = value.split('/')
+        const [, name] = fqn.split('.')
+        const url = `${baseUrl}/${version}/${fqn}.json`
+
+        return {
+          version,
+          name,
+          downloadUrl: url
+        } as SchemaConfig
+      })
+    }
   }
 
   public async import(options: ImportOptions) {
@@ -55,7 +78,7 @@ export abstract class ImportBase {
     const isTypescript = options.targetLanguage === Language.TYPESCRIPT
 
     for (const config of this.schemaConfig) {
-      const fileName = `${config.name}.ts`;
+      const fileName = `${config.name}-${config.version}.ts`;
       code.openFile(fileName);
       code.indentation = 2;
       await this.generateTypeScript(code, config);
