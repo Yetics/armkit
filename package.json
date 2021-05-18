@@ -18,9 +18,9 @@
   "license": "Apache-2.0",
   "workspaces": {
     "packages": [
-      "examples/*",
       "packages/*",
-      "packages/@armkit/*"
+      "packages/@armkit/*",
+      "examples/*"
     ]
   },
   "devDependencies": {
