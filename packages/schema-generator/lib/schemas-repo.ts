@@ -43,7 +43,7 @@ class SchemaRepo {
         let result: string[] = [];
 
         this.Services.forEach((value: SchemaItem, key: string, map) => {
-            result.push(`${value.version}/${value.name}`);
+            result.push(`${value.version}/${value.name.substring(0, value.name.length-5)}`);
         })
        
         return result;
@@ -63,12 +63,19 @@ function writeOutput(fileName: string, data: any) {
         (err) => console.log(err));
 }
 
+function getOutputFileName() : string {
+    if (process.argv.length > 2) {
+        return process.argv[2];
+    }
+    return 'out/schema-config-repo.json';
+}
+
 async function main() {
     let schemaRepo = new SchemaRepo(process.env.GITHUB_ACCESS_TOKEN);
     await schemaRepo.loadVersions();
     await schemaRepo.loadServices();
 
-    writeOutput('out/schema-config-repo.json', schemaRepo.serviceList());
+    writeOutput(getOutputFileName(), schemaRepo.serviceList());
 }
 
 main();

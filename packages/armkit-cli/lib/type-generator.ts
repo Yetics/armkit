@@ -265,7 +265,7 @@ export class TypeGenerator {
     this.emitLater(typeName, code => {
       code.openBlock(`export enum ${typeName}`);
       values.forEach((v) => {
-        const validName = `${v}`.match(/^([a-zA-Z_])+$/) ? constantCase(`${v}`) : `"${constantCase(`${v}`)}"`
+        const validName = `${v}`.match(/^([a-zA-Z_])+$/) ? constantCase(`${v}`) : `"${typeName}_${constantCase(`${v}`)}"`
         // console.log({ validName })
         code.line(`${validName} = '${v}',`)
       })
