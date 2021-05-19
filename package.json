@@ -20,6 +20,7 @@
     "packages": [
       "packages/*",
       "packages/@armkit/*",
+      "packages/schema-generator/*",
       "examples/*"
     ]
   },
