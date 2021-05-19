@@ -1,5 +1,5 @@
 {
-  "name": "@armkit/core",
+  "name": "@yetics/armkit-core",
   "version": "0.0.0",
   "description": "armkit",
   "main": "lib/index.js",
@@ -56,5 +56,12 @@
     "@typescript-eslint/eslint-plugin": "^2.22.0",
     "@typescript-eslint/parser": "^2.22.0",
     "jest": "^25.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yetics/armkit.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
