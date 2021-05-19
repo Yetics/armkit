@@ -56,11 +56,11 @@ class SchemaRepo {
 
 function writeOutput(fileName: string, data: any) {
     let fs = require('fs');
-        fs.writeFile(
-            fileName, 
-            JSON.stringify(data), 
-            '', 
-            (err) => console.log(err));
+    fs.writeFile(
+        fileName, 
+        JSON.stringify(data), 
+        '', 
+        (err) => console.log(err));
 }
 
 async function main() {

@@ -20,7 +20,8 @@
     "packages": [
       "examples/*",
       "packages/*",
-      "packages/@armkit/*"
+      "packages/@armkit/*",
+      "packages/schema-generator/*"
     ]
   },
   "devDependencies": {
