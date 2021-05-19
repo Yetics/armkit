@@ -36,7 +36,7 @@ export abstract class ImportBase {
 
     return config.map(value => {
       const [version, fqn] = value.split('/')
-      const [, name] = fqn.split('.')
+      const name = fqn.split('.').slice(1).join('')
       const url = `${baseUrl}/${version}/${fqn}.json`
 
       return {
