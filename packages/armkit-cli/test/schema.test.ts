@@ -24,15 +24,7 @@ test('container_registry_schema.test', async () => {
   expect(output).toMatchSnapshot();
 });
 
-test('container_service_schema.test', async () => {
-  const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'container_service.test'));
-  const importer = new ImportArmSchema(`["2020-09-01/Microsoft.ContainerService"]`);
 
-  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
-
-  const output = fs.readFileSync(path.join(workdir, `ContainerService.ts`), 'utf-8');
-  expect(output).toMatchSnapshot();
-});
 
 test('storage_schema.test', async () => {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'storage.test'));
@@ -43,3 +35,13 @@ test('storage_schema.test', async () => {
   const output = fs.readFileSync(path.join(workdir, `Storage.ts`), 'utf-8');
   expect(output).toMatchSnapshot();
 });
+
+// test('container_service_schema.test', async () => {
+//   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), 'container_service.test'));
+//   const importer = new ImportArmSchema(`["2020-09-01/Microsoft.ContainerService"]`);
+
+//   await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
+
+//   const output = fs.readFileSync(path.join(workdir, `ContainerService.ts`), 'utf-8');
+//   expect(output).toMatchSnapshot();
+// });
