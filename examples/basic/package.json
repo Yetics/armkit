@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "typescript": "^3.8.3",
-    "@armkit/core": "0.0.0"
+    "@yetics/armkit-core": "0.0.0"
   },
   "devDependencies": {
     "armkit-cli": "0.0.0"
