@@ -55,7 +55,7 @@ export abstract class ImportBase {
     const isTypescript = options.targetLanguage === Language.TYPESCRIPT
 
     for (const config of this.schemaConfig) {
-      const fileName = `${config.name}.ts`;
+      const fileName = `${config.name}$-{config.version}.ts`;
       code.openFile(fileName);
       code.indentation = 2;
       await this.generateTypeScript(code, config);
