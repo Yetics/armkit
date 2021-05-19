@@ -31,19 +31,21 @@ jobs:
       - name: installing dependencies
         run: |
           yarn install
-      - name: compile
+      - name: compile_armkit_core
         run: |
-          tools/align-version.sh
+          cd packages/@armkit/core
           yarn build
+      - name: compile_armkit-cli
+        run: |
+          cd packages/armkit-cli
+          yarn build          
       - name: test
         run: |
+          cd packages/armkit-cli
           yarn test
-      - name: integration tests
-        run: yarn integration:${TEST_TARGET} 
-      - name: create bundle
-        run: yarn package
-      - name: Upload dist 
-        uses: actions/upload-artifact@v2
-        with: 
-          name: dist 
-          path: dist 
+      - name: build_examples
+        run: |
+          cd examples/basic
+          yarn generate
+          yarn build 
+          node index.ts
