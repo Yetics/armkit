@@ -5,7 +5,7 @@ import { ImportArmSchema } from '../lib/import';
 import { Language } from '../lib/base'
 
 // Comprehensive list of services.
-const services =
+const services: Array<string[]> =
   [
     ["2021-03-01/Microsoft.Kubernetes", "Kubernetes"],
     ["2021-03-01/Microsoft.AAD", "AAD"],
@@ -111,7 +111,8 @@ const services =
     ["2021-03-01/Microsoft.DataBox", "DataBox"],
   ];
 
-test.each(services)('%s.test', async (schemaConfig, serviceName) => {
+// Validates the ability to import a given schema into Typescript.
+const importerTest = async function (schemaConfig: string, serviceName: string) {
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), serviceName + '.test'));
   const importer = new ImportArmSchema(`["` + schemaConfig + `"]`);
 
@@ -119,4 +120,6 @@ test.each(services)('%s.test', async (schemaConfig, serviceName) => {
 
   const output = fs.readFileSync(path.join(workdir, serviceName + `.ts`), 'utf-8');
   expect(output).toMatchSnapshot();
-});
+}
+
+test.each(services)('%s.test', importerTest);
