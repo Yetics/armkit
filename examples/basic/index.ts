@@ -1,11 +1,11 @@
 import { Construct } from 'constructs';
-import { App, ArmStack } from '@armkit/core';
+import { App, ArmStack } from '@yetics/armkit-core';
 import {
-  ContainerGroups, ContainerGroupPropertiesOsTypeEnum, MicrosoftContainerInstanceContainerGroupsTypeEnum, MicrosoftContainerInstanceContainerGroupsApiVersionEnum
-} from './.generated/ContainerInstance'
+  ContainerGroups, ContainerGroupPropertiesOsType, MicrosoftContainerInstanceContainerGroupsType, MicrosoftContainerInstanceContainerGroupsApiVersion
+} from './.generated/ContainerInstance-2019-12-01'
 import {
-  Registries, MicrosoftContainerRegistryRegistriesApiVersionEnum, MicrosoftContainerRegistryRegistriesTypeEnum, SkuNameEnum
-} from './.generated/ContainerRegistry'
+  Registries, MicrosoftContainerRegistryRegistriesApiVersion, MicrosoftContainerRegistryRegistriesType, SkuName
+} from './.generated/ContainerRegistry-2019-05-01'
 
 export class HelloArmkit extends ArmStack {
   constructor(scope: Construct, id: string) {
@@ -14,8 +14,8 @@ export class HelloArmkit extends ArmStack {
     new ContainerGroups(this, 'MyContainerGroup', {
       name: 'azurecdktest',
       location: 'westeurope',
-      apiVersion: MicrosoftContainerInstanceContainerGroupsApiVersionEnum['2019_12_01'],
-      type: MicrosoftContainerInstanceContainerGroupsTypeEnum.MICROSOFT_CONTAINER_INSTANCE_CONTAINER_GROUPS,
+      apiVersion: MicrosoftContainerInstanceContainerGroupsApiVersion['2019_12_01'],
+      type: MicrosoftContainerInstanceContainerGroupsType.MICROSOFT_CONTAINER_INSTANCE_CONTAINER_GROUPS,
       properties: {
         containers: [{
           name: 'ubuntu-server',
@@ -35,17 +35,17 @@ export class HelloArmkit extends ArmStack {
 
           }
         }],
-        osType: ContainerGroupPropertiesOsTypeEnum.LINUX,
+        osType: ContainerGroupPropertiesOsType.LINUX,
       }
     })
 
     new Registries(this, 'azurecdktest', {
       name: 'azurecdktest',
       location: 'westeurope',
-      apiVersion: MicrosoftContainerRegistryRegistriesApiVersionEnum['2019_05_01'],
-      type: MicrosoftContainerRegistryRegistriesTypeEnum.MICROSOFT_CONTAINER_REGISTRY_REGISTRIES,
+      apiVersion: MicrosoftContainerRegistryRegistriesApiVersion['2019_05_01'],
+      type: MicrosoftContainerRegistryRegistriesType.MICROSOFT_CONTAINER_REGISTRY_REGISTRIES,
       sku: {
-        name: SkuNameEnum.BASIC
+        name: SkuName.BASIC
       },
       properties: {
         adminUserEnabled: false
