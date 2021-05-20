@@ -13,8 +13,7 @@ const importerTest = async function (schemaConfig: string, serviceName: string) 
   const importer = new ImportArmSchema(`["` + schemaConfig + `"]`);
 
   await importer.import({ outdir: workdir, targetLanguage: Language.TYPESCRIPT })
-
-  const output = fs.readFileSync(path.join(workdir, serviceName + `-` + version + `.ts`), 'utf-8');
+  const output = fs.readFileSync(path.join(workdir, serviceName.replace('.', '') + `-` + version + `.ts`), 'utf-8');
   expect(output).toMatchSnapshot();
 }
 
