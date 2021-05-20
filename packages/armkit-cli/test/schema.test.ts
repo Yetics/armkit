@@ -3,10 +3,10 @@ import * as os from 'os';
 import * as path from 'path';
 import { ImportArmSchema } from '../lib/import';
 import { Language } from '../lib/base'
-import AzureServices from './fixtures/azureServices'
 
 // Validates the ability to import a given schema into Typescript.
-const importerTest = async function (schemaConfig: string, serviceName: string) {
+const importerTest = async function (schemaConfig: string) {
+  const serviceName = getServiceName(schemaConfig)
   const version = schemaConfig.split('/').shift()
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), serviceName + '.test'));
 
@@ -17,4 +17,11 @@ const importerTest = async function (schemaConfig: string, serviceName: string) 
   expect(output).toMatchSnapshot();
 }
 
-test.each(AzureServices)('%s.test', importerTest);
+function getServiceName(schema: string): string {
+  const [, fqn] = schema.split('/')
+  const name = fqn.split('.').slice(1).join('')
+  return name
+}
+// Load the list of services from schema-config.json.
+const serviceList = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'schema-config.json')).toString()) as string[]
+test.each(serviceList)('%s.test', importerTest);
