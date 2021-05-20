@@ -103,6 +103,18 @@ const AzureServices: string[][] =
     ["2020-07-07/Microsoft.OffAzure", "OffAzure"],
     ["2021-04-01/Microsoft.AlertsManagement", "AlertsManagement"],
     ["2021-03-01/Microsoft.DataBox", "DataBox"],
+    ["2021-03-01/Microsoft.Cache.Enterprise", "Cache.Enterprise"],
+    ["2016-10-01/Microsoft.StorSimple.1200", "StorSimple.1200"],
+    ["2021-03-01/Microsoft.RecoveryServices.Backup", "RecoveryServices.Backup"],
+    ["2019-03-01/Microsoft.Compute.Galleries", "Compute.Galleries"],
+    ["2017-06-01/Microsoft.StorSimple.8000", "StorSimple.8000"],
+    ["2021-03-01/Microsoft.RecoveryServices.SiteRecovery", "RecoveryServices.SiteRecovery"],
+    ["2020-12-01/Microsoft.Compute.Extensions", "Compute.Extensions"],
+    ["2016-06-01/Microsoft.RecoveryServices.legacy", "RecoveryServices.legacy"],
+    ["2020-03-01/Microsoft.Devices.Provisioning", "Devices.Provisioning"],
+    ["2020-11-01/Microsoft.Network.FrontDoor", "Network.FrontDoor"],
+    ["2021-03-08/Microsoft.Insights.Application", "Insights.Application"],
+    ["2015-06-01/Microsoft.KeyVault.Secrets", "KeyVault.Secrets"],
   ];
 
 export default AzureServices;
