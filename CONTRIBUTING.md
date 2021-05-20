@@ -26,20 +26,14 @@ and let us know if it's not up-to-date (even better, submit a PR with your  corr
 Clone the project repository
 
 ```bash
-gh repo clone Yetics/armkit
+git clone https://github.com/Yetics/armkit.git
 ```
 
-Download dependencies
+Download dependencies and build `node.js`:
 
 ```bash
 cd armkit/
-yarn
-```
-
-Build the project and packages
-
-```bash
-(cd examples/basic ; yarn && yarn generate && yarn build)
+yarn install
 yarn build
 ```
 
@@ -69,5 +63,5 @@ resulting in a `.generated` folder containing the typescript libraries.
 ## Running tests
 
 ```shell
- ~/armkit/packages/armkit-cli$ yarn test
+~$ yarn test
 ```
