@@ -46,7 +46,13 @@ class SchemaRepo {
             result.push(`${value.version}/${value.name.substring(0, value.name.length-5)}`);
         })
        
-        return result;
+        return result.sort(function(x: string, y: string) : number {
+            let xName = x.split('/')[1];
+            let yName = y.split('/')[1];
+            if (xName < yName) return -1;
+            if (xName > yName) return 1;
+            return 0;
+         });
     }
 
     RepoClient: any;
