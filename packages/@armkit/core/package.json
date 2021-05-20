@@ -1,7 +1,7 @@
 {
   "name": "@yetics/armkit-core",
   "version": "0.0.0",
-  "description": "Cloud Development Kit for Azure",
+  "description": "Azure Cloud Development Kit for Azure",
   "main": "lib/index.js",
   "publishConfig": {
     "access": "public"

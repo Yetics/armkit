@@ -1,19 +1,62 @@
 {
-  "name": "armkit-resources",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@yetics/armkit-resources",
+  "version": "0.0.0",
+  "description": "Azure Cloud Development Kit for Azure contruct resources",
   "main": "lib/resources.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
+    "watch-preserve-output": "tsc -w --preserveWatchOutput",
     "lint": "eslint . --ext .ts",
-    "test": "jest --passWithNoTests",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "test": "yarn lint && jest",
+    "jest-watch": "jest --watch",
     "package": "./package.sh",
+    "dist-clean": "rm -rf dist",
     "generate": "armkit generate --output lib"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Yetics/armkit.git",
+    "directory": "packages/@yetics/armkit-resources"
+  },
+  "author": {
+    "name": "Andreas Heumaier",
+    "url": "https://armkit.dev"
+  },
+  "keywords": [
+    "armkit",
+    "cdk",
+    "cloud",
+    "azure"
+  ],
   "license": "Apache-2.0",
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": 0,
+      "@typescript-eslint/explicit-function-return-type": 0,
+      "@typescript-eslint/no-use-before-define": 0
+    },
+    "ignorePatterns": [
+      "node_modules",
+      "dist",
+      "coverage"
+    ]
+  },
   "dependencies": {
+    "@types/node": "^13.13.4",
+    "constructs": "^3.0.2",
+    "typescript": "^3.8.3",
     "@yetics/armkit-core": "0.0.0"
   }
 }
