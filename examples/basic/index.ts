@@ -14,8 +14,8 @@ export class HelloArmkit extends ArmStack {
     new ContainerGroups(this, 'MyContainerGroup', {
       name: 'azurecdktest',
       location: 'westeurope',
-      apiVersion: MicrosoftContainerInstanceContainerGroupsApiVersion["2021_03_01"],
-      type: MicrosoftContainerInstanceContainerGroupsType.MICROSOFT_CONTAINER_INSTANCE_CONTAINER_GROUPS,
+      apiVersion: MicrosoftContainerInstanceContainerGroupsApiVersion["MicrosoftContainerInstanceContainerGroupsApiVersion_2021_03_01"],
+      type: MicrosoftContainerInstanceContainerGroupsType.MicrosoftContainerInstanceContainerGroupsType_MICROSOFT_CONTAINER_INSTANCE_CONTAINER_GROUPS,
       properties: {
         containers: [{
           name: 'ubuntu-server',
@@ -42,8 +42,8 @@ export class HelloArmkit extends ArmStack {
     new Registries(this, 'azurecdktest', {
       name: 'azurecdktest',
       location: 'westeurope',
-      apiVersion: MicrosoftContainerRegistryRegistriesApiVersion['2019_05_01'],
-      type: MicrosoftContainerRegistryRegistriesType.MICROSOFT_CONTAINER_REGISTRY_REGISTRIES,
+      apiVersion: MicrosoftContainerRegistryRegistriesApiVersion['MicrosoftContainerRegistryRegistriesApiVersion_2019_05_01'],
+      type: MicrosoftContainerRegistryRegistriesType.MicrosoftContainerRegistryRegistriesType_MICROSOFT_CONTAINER_REGISTRY_REGISTRIES,
       sku: {
         name: SkuName.BASIC
       },
