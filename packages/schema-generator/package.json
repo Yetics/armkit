@@ -1,5 +1,5 @@
 {
-  "name": "schema-generator",
+  "name": "armkit-schema-generator",
   "version": "1.0.0",
   "description": "",
   "main": "lib/schemas-repo.js",
