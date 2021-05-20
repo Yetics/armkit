@@ -31,21 +31,12 @@ jobs:
       - name: installing dependencies
         run: |
           yarn install
-      - name: compile_armkit_core
+      - name: compile
         run: |
-          cd packages/@armkit/core
-          yarn build
-      - name: compile_armkit-cli
-        run: |
-          cd packages/armkit-cli
-          yarn build          
+          yarn build        
       - name: test
         run: |
-          cd packages/armkit-cli
           yarn test
       - name: build_examples
         run: |
-          cd examples/basic
-          yarn generate
-          yarn build 
-          node index.ts
+          yarn examples:basic:integration
