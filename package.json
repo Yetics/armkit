@@ -7,10 +7,12 @@
   "scripts": {
     "bump": "tools/bump.sh",
     "build": "lerna run --scope armkit* --scope @yetics/* build",
+    "examples:basic:integration": "lerna run --scope @examples/* fullchain",
     "test": "lerna run --scope armkit* test",
     "package": "lerna run package",
     "release": "tools/release.sh",
     "lint": "eslint packages/armkit-cli",
+
     "dist-clean": "lerna run dist-clean --stream && rm -rf dist"
   },
   "engines": {
@@ -25,7 +27,9 @@
     "packages": [
       "packages/*",
       "packages/@armkit/*",
-      "examples/*"
+      "examples/*",
+      "examples/basic/*"
+
     ]
   },
   "devDependencies": {
