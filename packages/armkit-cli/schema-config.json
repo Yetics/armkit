@@ -112,5 +112,10 @@
   "2020-03-01/Microsoft.Devices.Provisioning",
   "2020-11-01/Microsoft.Network.FrontDoor",
   "2021-03-08/Microsoft.Insights.Application",
-  "2015-06-01/Microsoft.KeyVault.Secrets"
+  "2015-06-01/Microsoft.KeyVault.Secrets",
+  "2018-07-01/Microsoft.Media",
+  "2020-11-01/Microsoft.Network",
+  "2020-12-01/Microsoft.ApiManagement",
+  "2018-11-01/Microsoft.Web",
+  "2019-06-01/Microsoft.Automation"
 ]
