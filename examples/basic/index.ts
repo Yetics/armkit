@@ -2,7 +2,7 @@ import { Construct } from 'constructs';
 import { App, ArmStack } from '@yetics/armkit-core';
 import {
   ContainerGroups, ContainerGroupPropertiesOsType, MicrosoftContainerInstanceContainerGroupsType, MicrosoftContainerInstanceContainerGroupsApiVersion
-} from './.generated/ContainerInstance-2019-12-01'
+} from './.generated/ContainerInstance-2021-03-01'
 import {
   Registries, MicrosoftContainerRegistryRegistriesApiVersion, MicrosoftContainerRegistryRegistriesType, SkuName
 } from './.generated/ContainerRegistry-2019-05-01'
@@ -14,7 +14,7 @@ export class HelloArmkit extends ArmStack {
     new ContainerGroups(this, 'MyContainerGroup', {
       name: 'azurecdktest',
       location: 'westeurope',
-      apiVersion: MicrosoftContainerInstanceContainerGroupsApiVersion['2019_12_01'],
+      apiVersion: MicrosoftContainerInstanceContainerGroupsApiVersion["2021_03_01"],
       type: MicrosoftContainerInstanceContainerGroupsType.MICROSOFT_CONTAINER_INSTANCE_CONTAINER_GROUPS,
       properties: {
         containers: [{
