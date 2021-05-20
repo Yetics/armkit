@@ -7,12 +7,14 @@ import AzureServices from './fixtures/azureServices'
 
 // Validates the ability to import a given schema into Typescript.
 const importerTest = async function (schemaConfig: string, serviceName: string) {
+  const version = schemaConfig.split('/').shift()
   const workdir = fs.mkdtempSync(path.join(os.tmpdir(), serviceName + '.test'));
+
   const importer = new ImportArmSchema(`["` + schemaConfig + `"]`);
 
-  await importer.import({outdir: workdir, targetLanguage: Language.TYPESCRIPT})
+  await importer.import({ outdir: workdir, targetLanguage: Language.TYPESCRIPT })
 
-  const output = fs.readFileSync(path.join(workdir, serviceName + `.ts`), 'utf-8');
+  const output = fs.readFileSync(path.join(workdir, serviceName + `-` + version + `.ts`), 'utf-8');
   expect(output).toMatchSnapshot();
 }
 
