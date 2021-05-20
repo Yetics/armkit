@@ -1,18 +1,19 @@
 {
-  "name": "armkit-schema-generator",
+  "name": "armkit-resources",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/schemas-repo.js",
+  "main": "lib/resources.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "lint": "eslint . --ext .ts",
     "test": "jest --passWithNoTests",
-    "package": "./package.sh"
+    "package": "./package.sh",
+    "generate": "armkit generate --output lib"
   },
+  "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "dotenv": "^9.0.2",
-    "octonode": "^0.10.2"
+    "@yetics/armkit-core": "0.0.0"
   }
 }
