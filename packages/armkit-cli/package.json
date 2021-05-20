@@ -1,16 +1,29 @@
 {
   "name": "armkit-cli",
   "version": "0.0.0",
-  "description": "armkit",
+  "description": "CDK for Azure CLI",
   "bin": {
     "armkit": "bin/armkit"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
+    "watch-preserve-output": "tsc -w --preserveWatchOutput",
     "lint": "eslint . --ext .ts",
-    "test": "jest",
-    "package": "./package.sh"
+    "lint:fix": "eslint . --ext .ts --fix",
+    "test": "yarn lint && jest",
+    "jest-watch": "jest --watch",
+    "package": "./package.sh",
+    "dist-clean": "rm -rf dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Yetics/armkit.git",
+    "directory": "packages/armkit-cli"
+  },
+  "author": {
+    "name": "Andreas Heumaier",
+    "url": "https://armkit.dev"
   },
   "keywords": [
     "armkit",
@@ -27,14 +40,13 @@
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended"
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended"
     ],
     "rules": {
       "@typescript-eslint/no-explicit-any": 0,
       "@typescript-eslint/explicit-function-return-type": 0,
-      "@typescript-eslint/no-use-before-define": 0,
-      "@typescript-eslint/camelcase": 0,
-      "@typescript-eslint/no-this-alias": 0
+      "@typescript-eslint/no-use-before-define": 0
     },
     "ignorePatterns": [
       "node_modules",
