@@ -1,15 +1,22 @@
 {
-  "name": "root",
-  "private": true,
-  "version": "0.0.1",
+  "name": "@examples/typescript-basic",
+  "version": "0.0.0",
   "main": "index.js",
+  "types": "index.ts",
+  "private": true,
   "scripts": {
     "bump": "tools/bump.sh",
-    "build": "lerna run build",
-    "test": "lerna run test",
+    "build": "lerna run --scope armkit* --scope @yetics/* build",
+    "examples:basic:integration": "lerna run --scope @examples/* fullchain",
+    "test": "lerna run --scope armkit* test",
     "package": "lerna run package",
     "release": "tools/release.sh",
-    "lint": "eslint packages/armkit-cli"
+    "lint": "eslint packages/armkit-cli",
+
+    "dist-clean": "lerna run dist-clean --stream && rm -rf dist"
+  },
+  "engines": {
+    "node": ">=10.12"
   },
   "author": {
     "name": "Armkit",
@@ -20,8 +27,9 @@
     "packages": [
       "packages/*",
       "packages/@armkit/*",
-      "packages/schema-generator/*",
-      "examples/*"
+      "examples/*",
+      "examples/basic/*"
+
     ]
   },
   "devDependencies": {

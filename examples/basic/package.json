@@ -7,15 +7,17 @@
     "build": "if [ -d .generated ]; then tsc; fi",
     "watch": "tsc -w",
     "lint": "eslint . --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "armkit generate"
+    "test": "yarn lint && echo \"Error: no test specified\" && exit 1",
+    "generate": "armkit generate",
+    "fullchain": "yarn generate && yarn build && node index.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
-    "typescript": "^3.8.3",
-    "@armkit/core": "0.0.0"
+    "@yetics/armkit-core": "0.0.0",
+    "tslint": "^6.1.3",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
     "armkit-cli": "0.0.0"

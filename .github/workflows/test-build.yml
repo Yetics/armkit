@@ -5,9 +5,11 @@ on:
   # but only for the development branch
   push:
     branches:
+      - main
       - development
   pull_request:
     branches:
+      - main
       - development
 
 jobs:
@@ -31,19 +33,10 @@ jobs:
           yarn install
       - name: compile
         run: |
-          tools/align-version.sh
-          yarn build
+          yarn build        
       - name: test
         run: |
           yarn test
-      - name: integration tests
-        run: yarn integration:${TEST_TARGET} 
-      - name: create bundle
-        run: yarn package
-      - name: Upload dist 
-        uses: actions/upload-artifact@v2
-        with: 
-          name: dist 
-          path: dist 
-
-     
+      - name: build_examples
+        run: |
+          yarn examples:basic:integration
