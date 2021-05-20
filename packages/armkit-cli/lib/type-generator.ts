@@ -237,7 +237,8 @@ export class TypeGenerator {
             type = 'any'
           }
         } else if (option.properties) {
-          this.emitStruct(typeName, option, `${typeName}`)
+          type = typeName + def.oneOf?.indexOf(option)
+          this.emitStruct(type, option, `${type}`)
         } else if (Array.isArray(option.type) || option.required) {
           type = 'any'
         } else {
