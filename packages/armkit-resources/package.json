@@ -2,7 +2,8 @@
   "name": "@yetics/armkit-resources",
   "version": "0.0.0",
   "description": "Azure Cloud Development Kit for Azure contruct resources",
-  "main": "lib/resources.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
@@ -39,8 +40,7 @@
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/eslint-recommended",
-      "plugin:@typescript-eslint/recommended",
-      "plugin:react/recommended"
+      "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
       "@typescript-eslint/no-explicit-any": 0,
