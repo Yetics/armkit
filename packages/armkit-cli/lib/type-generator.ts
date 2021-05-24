@@ -69,7 +69,7 @@ export class TypeGenerator {
       function emitInitializerSuper() {
         code.open(`super(scope, name, {`);
         code.line(`...options,`);
-        code.line(`armResourceType: '${def.kind}',`);
+        code.line(`type: '${def.schema.description}',`);
         code.close(`});`);
       }
     });
