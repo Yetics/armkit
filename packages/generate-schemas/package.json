@@ -1,0 +1,16 @@
+{
+  "name": "generate-schemas",
+  "version": "1.0.0",
+  "description": "Generate JSON Schemas from Azure REST API specs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "bash generate-schemas.sh",
+    "clean": "rm -rf armkit-schemas && rm -rf azure-rest-api-specs"
+  },
+  "author": "Microsoft CSE",
+  "license": "MIT",
+  "dependencies": {
+    "autorest": "^3.2.0"
+  }
+}
